@@ -60,6 +60,20 @@ Task tool (general-purpose):
     - <constraint> [source: <link>]
     - <constraint> [source: <link>]
 
+    **Mock contract**
+    The downstream `test-driven-development` skill will read this section to build
+    mocks. Capture ONLY what the authoritative docs document explicitly — if a
+    field, error condition, or side effect is not documented, do NOT invent it;
+    list it under "Couldn't verify" instead. Format:
+
+    - **Symbols to mock**: <symbol>(<verified signature>) -> <return type> [source: <link>]
+    - **Return shape** (verbatim from docs, including nullability and optional fields):
+      ```
+      <quoted from doc example or schema>
+      ```
+    - **Errors / exceptions**: <ExceptionType> raised when <condition> [source: <link>]
+    - **Side effects** (rate limits, retries, idempotency, observable state changes): <effect> [source: <link>]
+
     **Verified examples**
     Cite OFFICIAL examples or test files. Do not write your own.
     - <description> — see <link or repo path>
@@ -87,6 +101,8 @@ Task tool (general-purpose):
     - Cite blog posts, Stack Overflow, or forums
     - Smooth over ambiguity — flag it
     - Return free-form prose; use the format above exactly
+    - Fill the Mock contract with fields/errors/effects that are not explicitly
+      documented — undocumented = Couldn't verify, never invented
 ```
 
 ## Placeholders

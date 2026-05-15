@@ -66,6 +66,23 @@ Task tool (general-purpose):
     **Constraints discovered**
     - <constraint observed during spike> [source: spike line N]
 
+    **Mock contract**
+    The downstream `test-driven-development` skill will read this section to build
+    mocks. It MUST capture the actual shape observed during the spike — not what
+    you remember from training, not what the docs say in general, but what the
+    spike actually returned/raised. Format:
+
+    - **Symbols to mock**: <symbol>(<verified signature>) -> <return type> [source: spike line N]
+    - **Return shape** (verbatim observed structure, with nullability and optional fields):
+      ```
+      <pasted from spike output>
+      ```
+    - **Errors / exceptions**: <ExceptionType> raised when <condition> [source: spike line N]
+    - **Side effects**: <IO / state mutation / network> [source: spike line N]
+
+    If the spike could NOT observe one of these (e.g., never hit an error path),
+    say so explicitly under Open assumptions — do NOT invent the shape.
+
     **Divergence from docs** (if any)
     - <what docs said> vs <what spike showed>
 
@@ -98,6 +115,8 @@ Task tool (general-purpose):
     - Invoke production endpoints with destructive side effects (writes, deletes)
       without explicit hint from the questions
     - Fall back to training-memory claims when spike couldn't verify
+    - Fill the Mock contract with shapes you didn't actually observe — list
+      them under Open assumptions instead
 ```
 
 ## Placeholders

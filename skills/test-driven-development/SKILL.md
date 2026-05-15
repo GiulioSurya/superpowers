@@ -335,6 +335,7 @@ Before marking work complete:
 - [ ] All tests pass
 - [ ] Output pristine (no errors, warnings)
 - [ ] Tests use real code (mocks only if unavoidable)
+- [ ] Every mock of an external dependency cites a `Mock contract` in `docs/superpowers/research/<spec>.md` via a `mock-source:` comment
 - [ ] Edge cases and errors covered
 
 Can't check all boxes? You skipped TDD. Start over.
@@ -354,12 +355,49 @@ Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix 
 
 Never fix bugs without a test.
 
+## Mocking — Single Source Of Truth
+
+**Iron rule.** If you mock an external dependency (SDK, library, API, anything you do not own), the shape of the mock — return values, error types, side effects, signatures — comes from **one and only one place**: the `Mock contract` subsection inside `docs/superpowers/research/<spec>.md` for that tech. Not from training memory, not from "what the docs probably say", not from a similar SDK you remember. The research artifact or nothing.
+
+**Why.** Mocks crystallize an assumption about the dependency. If the assumption is bluffed, the test passes against your fantasy and breaks in production. The research artifact is the only document where the dependency shape was *verified* against an authoritative source (T0 = `<file>:<line>` in this codebase, T1 = official docs, T2 = a spike that actually ran). That verification is what makes a mock load-bearing instead of decorative.
+
+**Procedural gate — before writing any mock for an external dependency:**
+
+```
+1. Does docs/superpowers/research/<spec>.md exist for this work?
+   NO  → see "No research artifact" below
+   YES → continue
+
+2. Does that artifact contain a "Mock contract" subsection for this tech?
+   NO  → STOP. Three options, pick one and document the choice:
+         (a) use the real dependency in the test (preferred if cheap),
+         (b) invoke superpowers:pre-implementation-research ad-hoc for THIS
+             tech only, produce a minimal Mock contract, then resume,
+         (c) refuse to write the test and raise it to the user.
+   YES → continue
+
+3. Copy the Mock contract verbatim into your mock implementation. Above
+   the mock, leave a citation comment in this exact form:
+
+   # mock-source: docs/superpowers/research/<spec>.md#mock-contract-<tech>
+   # verified <YYYY-MM-DD> via <T0 file:line | T1 doc URL | T2 spike path>
+
+4. Do NOT add fields, errors, or side effects that are not in the Mock
+   contract. If your test needs behavior the contract doesn't cover, the
+   contract is incomplete — go back to step 2.
+```
+
+**No research artifact** (small fix path, no spec/plan upstream): you must produce a minimal `Mock contract` for the dep you are about to mock before writing the mock. The lightest path is to invoke `superpowers:pre-implementation-research` scoped to that single tech — the skill can run on a synthetic one-tech inventory and write the artifact to `docs/superpowers/research/<topic>.md`. Alternative: skip the mock entirely and test against the real dependency. **Never** write the mock from memory and add a TODO — that is the bluff this skill exists to prevent.
+
+**Mock comment is mandatory.** A mock without a `mock-source:` citation comment is treated as bluffed and must be removed in review. The comment makes the chain auditable: the reviewer can grep the artifact and confirm the shape was actually verified.
+
 ## Testing Anti-Patterns
 
 When adding mocks or test utilities, read [testing-anti-patterns.md](testing-anti-patterns.md) to avoid common pitfalls:
 - Testing mock behavior instead of real behavior
 - Adding test-only methods to production classes
 - Mocking without understanding dependencies
+- Bluffed mock shape (shape invented instead of derived from research artifact)
 
 ## Final Rule
 

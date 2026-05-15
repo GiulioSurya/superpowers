@@ -86,6 +86,31 @@ Date: YYYY-MM-DD
 [T0 entries: inline one-liner with citation]
 [T1/T2 entries: fragment returned by subagent — paste verbatim]
 
+For every tech that the downstream implementation will MOCK in tests, the
+fragment MUST contain a `### Mock contract` subsection. This is the single
+source of truth for any mock that simulates this dependency — `test-driven-development`
+refuses to mock without it. Required fields:
+
+### Mock contract — <tech>@<version>
+**Symbols to mock** (method / function / class with full verified signature)
+- `<symbol>(<verified args>) -> <return type>` [source: <citation>]
+
+**Return shape** (verbatim structure — JSON / dataclass / TypedDict — including nullability and optional fields)
+```
+<full structure observed in spike or quoted from docs>
+```
+
+**Errors / exceptions** (type + condition that raises it)
+- `<ExceptionType>` raised when <condition> [source: <citation>]
+
+**Side effects** (IO, state mutation, network calls, scheduling — anything a test may need to assert against)
+- <effect> [source: <citation>]
+
+**Citation** — link to the Verified fact or spike line above that produced each entry.
+
+For T0 techs already in the codebase, the Mock contract is one line citing
+the existing usage: `mock contract derived from <file>:<line>`.
+
 ## Open assumptions
 Things not verified, fragile in the downstream plan. Explicit list — never empty unless every spec mention is covered above.
 
@@ -115,7 +140,7 @@ Otherwise every amendment MUST use this exact structure (no shortcuts, no free-f
 - <YYYY-MM-DD HH:MM> <tech>@<version> (Tier) → result/duration
 ```
 
-The sections passed to downstream subagents (in `writing-plans` and `executing-plans` dispatch context) are: **Verified facts**, **Constraints**, **Open assumptions**.
+The sections passed to downstream subagents (in `writing-plans` and `executing-plans` dispatch context) are: **Verified facts**, **Constraints**, **Open assumptions**, **Mock contract**. The Mock contract is what `test-driven-development` reads when it is about to mock the dependency — no Mock contract means no mock allowed.
 
 ## Spec Amendments After Research
 
@@ -159,6 +184,7 @@ If a T2 spike fails (auth missing, runtime error, env not available):
 | "I already mentioned the techs in passing while planning" | A passing mention is not the inventory gate. Step 4 requires the structured table (tech / version / tier / justification) presented as a discrete checkpoint with an explicit ask for approval. |
 | "I patched the spec, the amendment work is done" | Patching without the `<!-- amended per docs/superpowers/research/<name>.md amendment <N> on <YYYY-MM-DD> -->` back-reference is half the job. Future readers can't audit the spec change against the artifact, and `writing-plans` reads a spec that looks freely rewritten. The back-reference is mandatory, not stylistic. |
 | "Free-form prose for the amendment is fine, the gist is clear" | The structured template (numbered amendment, breadcrumbs, current/replacement blockquotes, issue, status) exists because free-form amendments routinely lose the verbatim "current text" or skip the spec section reference, and downstream readers can't apply them mechanically. Use the template verbatim. |
+| Tech has Verified facts but no Mock contract, and the plan will mock it | Bluff signature on the test side: the plan will mock something whose structure (return shape, errors, side effects) was never captured. `test-driven-development` will refuse the mock — or worse, will accept it and the agent will invent the shape from training memory. Every tech the plan mocks needs a Mock contract subsection. |
 
 ## Integration
 
