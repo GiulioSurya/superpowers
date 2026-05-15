@@ -277,16 +277,20 @@ def test_streaming(mock_client):
 ```
 BEFORE writing a mock for an external dependency:
 
+  THE TEST GETS WRITTEN EITHER WAY. This gate decides HOW the mock is
+  built, not whether the test exists.
+
   1. Open docs/superpowers/research/<spec>.md
   2. Find "### Mock contract — <tech>@<version>" for this dep
 
   IF the Mock contract does not exist:
-    STOP. You may not mock this dependency yet.
-    Options:
-      (a) Use the real dependency in the test (preferred if cheap)
-      (b) Invoke superpowers:pre-implementation-research ad-hoc to
-          produce a minimal Mock contract for this tech, THEN resume
-      (c) Refuse and raise to the user — never bluff the shape
+    The MOCK path is blocked, but the TEST still gets written. Pick one:
+      (a) Use the real dependency in the test (preferred when the dep is
+          cheap, fast, deterministic, and side-effect-safe).
+      (b) Invoke superpowers:pre-implementation-research ad-hoc scoped to
+          this single tech, produce a minimal Mock contract, THEN write
+          the mock against it.
+    Never bluff the shape. Never skip the test.
 
   IF the Mock contract exists:
     Copy its Return shape / Errors / Side effects verbatim into the mock.
@@ -294,11 +298,13 @@ BEFORE writing a mock for an external dependency:
       # mock-source: docs/superpowers/research/<spec>.md#mock-contract-<tech>
       # verified <YYYY-MM-DD> via <T0 file:line | T1 doc URL | T2 spike path>
 
-  Red flags during review:
-    - Mock without a mock-source: comment → treat as bluffed, remove or replace
-    - Mock includes fields not present in the Mock contract → invented, remove
-    - mock-source: points at a path that doesn't exist or lacks the named anchor
-      → broken citation, treat as bluffed
+  Red flags during review (the MOCK is removed/replaced, the TEST stays):
+    - Mock without a mock-source: comment → bluffed, replace with verified
+      mock or switch to real dep
+    - Mock includes fields not present in the Mock contract → invented,
+      remove them
+    - mock-source: points at a path that doesn't exist or lacks the named
+      anchor → broken citation, treat as bluffed
 ```
 
 ## Anti-Pattern 6: Integration Tests as Afterthought

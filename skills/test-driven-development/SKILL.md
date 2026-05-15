@@ -357,7 +357,9 @@ Never fix bugs without a test.
 
 ## Mocking — Single Source Of Truth
 
-**Iron rule.** If you mock an external dependency (SDK, library, API, anything you do not own), the shape of the mock — return values, error types, side effects, signatures — comes from **one and only one place**: the `Mock contract` subsection inside `docs/superpowers/research/<spec>.md` for that tech. Not from training memory, not from "what the docs probably say", not from a similar SDK you remember. The research artifact or nothing.
+**The test always gets written.** This section governs HOW you mock, never WHETHER you test. There is no "skip the test" or "refuse" branch — if the path to a verified mock is blocked, the test is written against the real dependency instead, or the block is removed by producing the Mock contract first. Tests are non-negotiable.
+
+**Iron rule.** If you mock an external dependency (SDK, library, API, anything you do not own), the shape of the mock — return values, error types, side effects, signatures — comes from **one and only one place**: the `Mock contract` subsection inside `docs/superpowers/research/<spec>.md` for that tech. Not from training memory, not from "what the docs probably say", not from a similar SDK you remember. The research artifact or no mock (real dep instead).
 
 **Why.** Mocks crystallize an assumption about the dependency. If the assumption is bluffed, the test passes against your fantasy and breaks in production. The research artifact is the only document where the dependency shape was *verified* against an authoritative source (T0 = `<file>:<line>` in this codebase, T1 = official docs, T2 = a spike that actually ran). That verification is what makes a mock load-bearing instead of decorative.
 
@@ -369,11 +371,13 @@ Never fix bugs without a test.
    YES → continue
 
 2. Does that artifact contain a "Mock contract" subsection for this tech?
-   NO  → STOP. Three options, pick one and document the choice:
-         (a) use the real dependency in the test (preferred if cheap),
-         (b) invoke superpowers:pre-implementation-research ad-hoc for THIS
-             tech only, produce a minimal Mock contract, then resume,
-         (c) refuse to write the test and raise it to the user.
+   NO  → the mock path is blocked, but THE TEST IS STILL WRITTEN. Two
+         options, pick one:
+         (a) write the test against the REAL dependency (preferred when
+             the dep is cheap, fast, deterministic, and side-effect-safe),
+         (b) invoke superpowers:pre-implementation-research ad-hoc scoped
+             to this single tech, produce a minimal Mock contract, then
+             resume with the mock.
    YES → continue
 
 3. Copy the Mock contract verbatim into your mock implementation. Above
@@ -387,9 +391,13 @@ Never fix bugs without a test.
    contract is incomplete — go back to step 2.
 ```
 
-**No research artifact** (small fix path, no spec/plan upstream): you must produce a minimal `Mock contract` for the dep you are about to mock before writing the mock. The lightest path is to invoke `superpowers:pre-implementation-research` scoped to that single tech — the skill can run on a synthetic one-tech inventory and write the artifact to `docs/superpowers/research/<topic>.md`. Alternative: skip the mock entirely and test against the real dependency. **Never** write the mock from memory and add a TODO — that is the bluff this skill exists to prevent.
+**No research artifact** (small fix path, no spec/plan upstream): the test still gets written. Pick the path that fits the dependency:
+- **Real dep in test** (preferred when cheap/fast/safe) — no Mock contract needed, no citation needed; this is just a normal test against real code.
+- **Ad-hoc research** — invoke `superpowers:pre-implementation-research` scoped to the single tech you intend to mock; it produces a minimal artifact at `docs/superpowers/research/<topic>.md` and you then mock against that. Use this when the real dep is paid, slow, destructive, or otherwise unsuitable for tests.
 
-**Mock comment is mandatory.** A mock without a `mock-source:` citation comment is treated as bluffed and must be removed in review. The comment makes the chain auditable: the reviewer can grep the artifact and confirm the shape was actually verified.
+**Never** write the mock from memory and add a TODO — that is the bluff this skill exists to prevent. The choice is real-dep-test or verified-mock-test, never bluffed-mock-test.
+
+**Mock comment is mandatory** when a mock is present. A mock without a `mock-source:` citation comment is treated as bluffed and must be replaced (either by a verified mock with citation, or by switching to the real dep). The test itself is never deleted — only the bluffed mock is. The comment makes the chain auditable: the reviewer can grep the artifact and confirm the shape was actually verified.
 
 ## Testing Anti-Patterns
 
