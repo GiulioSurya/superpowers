@@ -29,7 +29,7 @@ You MUST create a task for each of these items and complete them in order:
 6. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
 7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
 8. **User reviews written spec** — ask user to review the spec file before proceeding
-9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
+9. **Transition to implementation** — by default invoke `superpowers:pre-implementation-research`. Bypass it and invoke `superpowers:writing-plans` directly ONLY when the spec meets one of the criteria listed in pre-implementation-research's "Don't use when" section (all tech grep-verifiable in the current codebase, no external SDK/API, or the spec is itself a research document).
 
 ## Process Flow
 
@@ -43,6 +43,8 @@ digraph brainstorming {
     "Write design doc" [shape=box];
     "Spec self-review\n(fix inline)" [shape=box];
     "User reviews spec?" [shape=diamond];
+    "Spec uses external SDK/API\nnot grep-verifiable in codebase?" [shape=diamond];
+    "Invoke pre-implementation-research" [shape=doublecircle];
     "Invoke writing-plans skill" [shape=doublecircle];
 
     "Explore project context" -> "Ask clarifying questions";
@@ -54,11 +56,13 @@ digraph brainstorming {
     "Write design doc" -> "Spec self-review\n(fix inline)";
     "Spec self-review\n(fix inline)" -> "User reviews spec?";
     "User reviews spec?" -> "Write design doc" [label="changes requested"];
-    "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];
+    "User reviews spec?" -> "Spec uses external SDK/API\nnot grep-verifiable in codebase?" [label="approved"];
+    "Spec uses external SDK/API\nnot grep-verifiable in codebase?" -> "Invoke pre-implementation-research" [label="yes (default)"];
+    "Spec uses external SDK/API\nnot grep-verifiable in codebase?" -> "Invoke writing-plans skill" [label="no (bypass)"];
 }
 ```
 
-**The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans.
+**The terminal state is invoking either `pre-implementation-research` (default) or `writing-plans` (only when the spec meets pre-implementation-research's "Don't use when" criteria).** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY two skills you may invoke after brainstorming are `pre-implementation-research` and `writing-plans`.
 
 ## The Process
 
@@ -127,8 +131,12 @@ Wait for the user's response. If they request changes, make them and re-run the 
 
 **Implementation:**
 
-- Invoke the writing-plans skill to create a detailed implementation plan
-- Do NOT invoke any other skill. writing-plans is the next step.
+- **Default:** invoke `superpowers:pre-implementation-research`. It produces a research artifact under `docs/superpowers/research/` and then hands off to `writing-plans` itself.
+- **Bypass — invoke `superpowers:writing-plans` directly only if the spec meets one of the criteria in pre-implementation-research's "Don't use when" section:**
+  - all tech in the spec is already used in the current codebase and is grep-verifiable (`<file>:<line>`),
+  - no external SDK / library / API is involved (pure internal refactor),
+  - the spec itself is a research document.
+- Do NOT invoke any other implementation skill (frontend-design, mcp-builder, etc.). The only valid next steps are `pre-implementation-research` or `writing-plans`.
 
 ## Key Principles
 
