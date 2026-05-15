@@ -40,7 +40,7 @@ NO SUBAGENT DISPATCH WITHOUT USER-APPROVED TECH INVENTORY
 1. **Detect paths**
    - Spec: `docs/superpowers/specs/<name>.md`
    - Artifact: `docs/superpowers/research/<name>.md` (create directory if missing)
-   - Spike files: `/tmp/superpowers-spikes/<tech-slug>.<ext>` (create directory if missing). Ephemeral — kept so the user can inspect the code that produced the findings, not durable evidence. On macOS, files in `/tmp` are cleaned by the system after ~3 days of inactivity.
+   - Spike files: `/tmp/superpowers-spikes/<tech-slug>.<ext>` (create directory if missing). Ephemeral — kept so the user can inspect the code that produced the findings, not durable evidence.
 
 2. **Build tech inventory** — extract every SDK / library / API / type / method / class / response shape named in the spec.
 
@@ -140,7 +140,7 @@ If a T2 spike fails (auth missing, runtime error, env not available):
 - The tech entry's `Verified facts` stays empty
 - The failure (with cause) goes into `Open assumptions`
 - Workflow does NOT block — the plan downstream is informed of the fragility
-- The spike file is kept at `/tmp/superpowers-spikes/<tech-slug>.<ext>` so the user can inspect what was attempted (ephemeral; `/tmp` is cleaned after ~3 days on macOS). Do not assume future agents can re-run it — if research is repeated, treat the spike as needing to be recreated.
+- The spike file is kept at `/tmp/superpowers-spikes/<tech-slug>.<ext>` so the user can inspect what was attempted (ephemeral — `/tmp` is cleaned periodically by the OS). Do not assume future agents can re-run it — if research is repeated, treat the spike as needing to be recreated.
 
 ## Red Flags
 
