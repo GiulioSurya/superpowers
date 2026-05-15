@@ -61,10 +61,11 @@ Task tool (general-purpose):
     - <constraint> [source: <link>]
 
     **Mock contract**
-    The downstream `test-driven-development` skill will read this section to build
-    mocks. Capture ONLY what the authoritative docs document explicitly — if a
-    field, error condition, or side effect is not documented, do NOT invent it;
-    list it under "Couldn't verify" instead. Format:
+    Implementer subagents dispatched by `subagent-driven-development` will read
+    this section to build mocks. Capture ONLY what the authoritative docs
+    document explicitly — if a field, error condition, or side effect is not
+    documented, do NOT invent it; list it under "Couldn't verify" instead.
+    Format:
 
     - **Symbols to mock**: <symbol>(<verified signature>) -> <return type> [source: <link>]
     - **Return shape** (verbatim from docs, including nullability and optional fields):

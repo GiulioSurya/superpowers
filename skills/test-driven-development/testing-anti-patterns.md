@@ -16,8 +16,6 @@ Tests must verify real behavior, not mock behavior. Mocks are a means to isolate
 1. NEVER test mock behavior
 2. NEVER add test-only methods to production classes
 3. NEVER mock without understanding dependencies
-4. NEVER invent the shape of a mock — it MUST come from the research artifact's
-   Mock contract (docs/superpowers/research/<spec>.md). No artifact, no mock.
 ```
 
 ## Anti-Pattern 1: Testing Mock Behavior
@@ -227,87 +225,7 @@ BEFORE creating mock responses:
   If uncertain: Include all documented fields
 ```
 
-## Anti-Pattern 5: Bluffed Mock Shape
-
-**The violation:**
-```python
-# ❌ BAD: Mock shape invented from memory, no citation
-@patch("anthropic.Anthropic")
-def test_streaming(mock_client):
-    mock_client.return_value.messages.create.return_value = {
-        "content": [{"type": "text", "text": "hi"}],
-        "stop_reason": "end_turn",
-        "thinking": "let me think...",   # invented field, real SDK does not return this
-    }
-    result = my_handler(mock_client.return_value)
-    assert result == "hi"
-```
-
-**Why this is wrong:**
-- **The shape is a guess.** The agent did not verify what `messages.create` actually returns — it pattern-matched from training memory and adjacent SDKs.
-- **The test passes against the fantasy.** As long as production code accesses only invented fields, the test is green forever.
-- **Drift is silent.** Production hits the real SDK, finds the field missing or shaped differently, breaks at runtime. The test has been green the whole time.
-- **No audit trail.** A reviewer cannot tell whether the mock shape is real or imagined. There is no citation pointing at evidence.
-
-**The Iron Rule:** The shape of any mock for an external dependency comes from the `Mock contract` subsection of `docs/superpowers/research/<spec>.md`. If no Mock contract exists for this tech, you may not mock it — see `test-driven-development`'s "Mocking — Single Source Of Truth" section for the procedural gate.
-
-**The fix:**
-```python
-# ✅ GOOD: Mock shape copied verbatim from research artifact, citation present
-# mock-source: docs/superpowers/research/2026-05-15-gino-streaming.md#mock-contract-anthropic
-# verified 2026-05-15 via T2 spike at /tmp/superpowers-spikes/anthropic-streaming.py
-@patch("anthropic.Anthropic")
-def test_streaming(mock_client):
-    mock_client.return_value.messages.create.return_value = Message(
-        id="msg_01ABC",
-        type="message",
-        role="assistant",
-        content=[TextBlock(type="text", text="hi")],
-        model="claude-opus-4-7",
-        stop_reason="end_turn",
-        stop_sequence=None,
-        usage=Usage(input_tokens=10, output_tokens=2),
-    )
-    result = my_handler(mock_client.return_value)
-    assert result == "hi"
-```
-
-### Gate Function
-
-```
-BEFORE writing a mock for an external dependency:
-
-  THE TEST GETS WRITTEN EITHER WAY. This gate decides HOW the mock is
-  built, not whether the test exists.
-
-  1. Open docs/superpowers/research/<spec>.md
-  2. Find "### Mock contract — <tech>@<version>" for this dep
-
-  IF the Mock contract does not exist:
-    The MOCK path is blocked, but the TEST still gets written. Pick one:
-      (a) Use the real dependency in the test (preferred when the dep is
-          cheap, fast, deterministic, and side-effect-safe).
-      (b) Invoke superpowers:pre-implementation-research ad-hoc scoped to
-          this single tech, produce a minimal Mock contract, THEN write
-          the mock against it.
-    Never bluff the shape. Never skip the test.
-
-  IF the Mock contract exists:
-    Copy its Return shape / Errors / Side effects verbatim into the mock.
-    Add the citation comment above the mock:
-      # mock-source: docs/superpowers/research/<spec>.md#mock-contract-<tech>
-      # verified <YYYY-MM-DD> via <T0 file:line | T1 doc URL | T2 spike path>
-
-  Red flags during review (the MOCK is removed/replaced, the TEST stays):
-    - Mock without a mock-source: comment → bluffed, replace with verified
-      mock or switch to real dep
-    - Mock includes fields not present in the Mock contract → invented,
-      remove them
-    - mock-source: points at a path that doesn't exist or lacks the named
-      anchor → broken citation, treat as bluffed
-```
-
-## Anti-Pattern 6: Integration Tests as Afterthought
+## Anti-Pattern 5: Integration Tests as Afterthought
 
 **The violation:**
 ```
@@ -360,7 +278,6 @@ TDD cycle:
 | Test-only methods in production | Move to test utilities |
 | Mock without understanding | Understand dependencies first, mock minimally |
 | Incomplete mocks | Mirror real API completely |
-| Bluffed mock shape | Copy from research artifact's Mock contract; cite via `mock-source:` comment |
 | Tests as afterthought | TDD - tests first |
 | Over-complex mocks | Consider integration tests |
 

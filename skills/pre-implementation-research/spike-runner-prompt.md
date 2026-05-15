@@ -67,10 +67,10 @@ Task tool (general-purpose):
     - <constraint observed during spike> [source: spike line N]
 
     **Mock contract**
-    The downstream `test-driven-development` skill will read this section to build
-    mocks. It MUST capture the actual shape observed during the spike — not what
-    you remember from training, not what the docs say in general, but what the
-    spike actually returned/raised. Format:
+    Implementer subagents dispatched by `subagent-driven-development` will read
+    this section to build mocks. It MUST capture the actual shape observed
+    during the spike — not what you remember from training, not what the docs
+    say in general, but what the spike actually returned/raised. Format:
 
     - **Symbols to mock**: <symbol>(<verified signature>) -> <return type> [source: spike line N]
     - **Return shape** (verbatim observed structure, with nullability and optional fields):

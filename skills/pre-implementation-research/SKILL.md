@@ -88,8 +88,10 @@ Date: YYYY-MM-DD
 
 For every tech that the downstream implementation will MOCK in tests, the
 fragment MUST contain a `### Mock contract` subsection. This is the single
-source of truth for any mock that simulates this dependency — `test-driven-development`
-refuses to mock without it. Required fields:
+source of truth for any mock that simulates this dependency. The implementer
+subagents dispatched by `subagent-driven-development` receive the artifact
+path in their dispatch context and read this subsection when constructing
+mocks — see that skill's dispatch contract. Required fields:
 
 ### Mock contract — <tech>@<version>
 **Symbols to mock** (method / function / class with full verified signature)
@@ -140,7 +142,7 @@ Otherwise every amendment MUST use this exact structure (no shortcuts, no free-f
 - <YYYY-MM-DD HH:MM> <tech>@<version> (Tier) → result/duration
 ```
 
-The sections passed to downstream subagents (in `writing-plans` and `executing-plans` dispatch context) are: **Verified facts**, **Constraints**, **Open assumptions**, **Mock contract**. The Mock contract is what `test-driven-development` reads when it is about to mock the dependency — no Mock contract means no mock allowed.
+The sections passed to downstream subagents (in `writing-plans`, `executing-plans`, and `subagent-driven-development` dispatch context) are: **Verified facts**, **Constraints**, **Open assumptions**, **Mock contract**. The Mock contract is what `subagent-driven-development`'s implementer subagents read when constructing mocks for external dependencies — without it in the dispatch context, the subagent has no authoritative shape to cite.
 
 ## Spec Amendments After Research
 
@@ -184,7 +186,7 @@ If a T2 spike fails (auth missing, runtime error, env not available):
 | "I already mentioned the techs in passing while planning" | A passing mention is not the inventory gate. Step 4 requires the structured table (tech / version / tier / justification) presented as a discrete checkpoint with an explicit ask for approval. |
 | "I patched the spec, the amendment work is done" | Patching without the `<!-- amended per docs/superpowers/research/<name>.md amendment <N> on <YYYY-MM-DD> -->` back-reference is half the job. Future readers can't audit the spec change against the artifact, and `writing-plans` reads a spec that looks freely rewritten. The back-reference is mandatory, not stylistic. |
 | "Free-form prose for the amendment is fine, the gist is clear" | The structured template (numbered amendment, breadcrumbs, current/replacement blockquotes, issue, status) exists because free-form amendments routinely lose the verbatim "current text" or skip the spec section reference, and downstream readers can't apply them mechanically. Use the template verbatim. |
-| Tech has Verified facts but no Mock contract, and the plan will mock it | Bluff signature on the test side: the plan will mock something whose structure (return shape, errors, side effects) was never captured. `test-driven-development` will refuse the mock — or worse, will accept it and the agent will invent the shape from training memory. Every tech the plan mocks needs a Mock contract subsection. |
+| Tech has Verified facts but no Mock contract, and the plan will mock it | Bluff signature on the test side: the plan will mock something whose structure (return shape, errors, side effects) was never captured. The implementer subagent dispatched by `subagent-driven-development` won't have the contract to cite in its dispatch context — and will either bluff the shape or block. Every tech the plan mocks needs a Mock contract subsection. |
 
 ## Integration
 

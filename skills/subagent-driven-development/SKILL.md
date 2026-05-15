@@ -263,6 +263,23 @@ a ledger file, not only in todos.
 - `git clean -fdx` will destroy the ledger (it's git-ignored scratch); if
   that happens, recover from `git log`.
 
+## Dispatch Context — Research Artifact
+
+**You (the orchestrator) own the link between the research artifact and the implementer subagent.** The subagent runs in a fresh context with no memory of the plan, the spec, or the research run. It cannot find what you do not give it.
+
+**Mandatory in every implementer dispatch:**
+
+- The path to the research artifact when one exists for this work, e.g. `docs/superpowers/research/<spec-name>.md`. Paste it into the implementer prompt's `## Research artifact` slot (see `./implementer-prompt.md`).
+- An explicit pointer to the `## Per-tech findings → ### Mock contract` subsections for every external dependency the task will mock. The subagent reads these as the **single source of truth** for the shape of any mock (return values, error types, side effects).
+- The instruction that every mock the subagent writes must carry a citation comment immediately above it:
+  `# mock-source: docs/superpowers/research/<spec>.md#mock-contract-<tech>` (the implementer-prompt template enforces this).
+
+**If no research artifact exists** (rare in this skill's flow — the plan should have come from `writing-plans` after `pre-implementation-research`): tell the subagent explicitly in the dispatch context. Two options for the subagent:
+- write the test against the real dependency (no mock, no citation needed), OR
+- escalate as `NEEDS_CONTEXT` so you (the orchestrator) can invoke `pre-implementation-research` ad-hoc for the missing tech and re-dispatch.
+
+**Never** dispatch an implementer that will mock an external dependency without an artifact path in the context. That is the bluff signature this skill closes: a fresh subagent with no Mock contract will invent the shape from training memory, write a green test against the fantasy, and let the bug ship.
+
 ## Prompt Templates
 
 - [implementer-prompt.md](implementer-prompt.md) - Dispatch implementer subagent
@@ -387,6 +404,7 @@ Done!
 - Move to next task while the review has open Critical/Important issues
 - Re-dispatch a task the progress ledger already marks complete — check
   the ledger (and `git log`) after any compaction or resume
+- Dispatch an implementer that may mock an external dependency without including the research artifact path and a pointer to the relevant `Mock contract` subsections in the dispatch context — the subagent will bluff the shape
 
 **If subagent asks questions:**
 - Answer clearly and completely
@@ -408,6 +426,7 @@ Done!
 **Required workflow skills:**
 - **superpowers:using-git-worktrees** - Ensures isolated workspace (creates one or verifies existing)
 - **superpowers:writing-plans** - Creates the plan this skill executes
+- **superpowers:pre-implementation-research** - Produces the research artifact (with per-tech `Mock contract` subsections) that the orchestrator passes into every implementer dispatch; without it, mocks bluff
 - **superpowers:requesting-code-review** - Code review template for the final whole-branch review
 - **superpowers:finishing-a-development-branch** - Complete development after all tasks
 
