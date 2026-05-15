@@ -2,7 +2,7 @@
 
 Use when dispatching a Tier 2 subagent that must verify behavior by writing and running a throwaway spike.
 
-**Purpose:** Empirically verify SDK behavior the docs alone cannot confirm. Produces a persistent spike file plus a structured fragment for the research artifact.
+**Purpose:** Empirically verify SDK behavior the docs alone cannot confirm. Produces a structured fragment for the research artifact plus an ephemeral spike file in `/tmp/superpowers-spikes/` so the user can inspect the code that produced the findings.
 
 ```
 Task tool (general-purpose):
@@ -27,7 +27,10 @@ Task tool (general-purpose):
     ## Spike file location
     Write your spike to: {SPIKE_FILE_PATH}
 
-    The file MUST persist after execution. It is evidence and may be re-run by future agents.
+    The file is ephemeral — kept after execution so the user can inspect what was
+    attempted, NOT as durable evidence. Default location is under
+    `/tmp/superpowers-spikes/`, which the OS cleans periodically. Do not delete
+    the file before returning; do not assume it will still exist later.
 
     ## Process
 
@@ -73,7 +76,7 @@ Task tool (general-purpose):
     **Spike Failure** (only if applicable — omit section if spike succeeded)
     - What failed: <description>
     - Cause as best as could be diagnosed: <cause>
-    - Spike file is kept at {SPIKE_FILE_PATH} for future re-run
+    - Spike file left at {SPIKE_FILE_PATH} for user inspection (ephemeral)
 
     **Sources**
     - <doc link>
@@ -83,7 +86,7 @@ Task tool (general-purpose):
 
     DO:
     - Keep the spike small and focused on the listed questions
-    - Persist the spike file (no rm, no /tmp)
+    - Write the spike file to {SPIKE_FILE_PATH} (default `/tmp/superpowers-spikes/`) and leave it there after running
     - Report spike failures honestly
     - Cite version-matched docs in cross-check
     - Use real env vars and real endpoints when available
@@ -108,7 +111,7 @@ Task tool (general-purpose):
   - What is the exact shape of a thinking block? (type, content, signature?)
   - Does prompt caching survive across consecutive create() calls in the same session?
   ```
-- `{SPIKE_FILE_PATH}` — relative to repo root, e.g., `.claude/spikes/anthropic-thinking.py`
+- `{SPIKE_FILE_PATH}` — absolute path under `/tmp/superpowers-spikes/`, e.g., `/tmp/superpowers-spikes/anthropic-thinking.py`
 
 ## What the coordinator does with the result
 

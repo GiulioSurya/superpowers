@@ -40,7 +40,7 @@ NO SUBAGENT DISPATCH WITHOUT USER-APPROVED TECH INVENTORY
 1. **Detect paths**
    - Spec: `docs/superpowers/specs/<name>.md`
    - Artifact: `docs/superpowers/research/<name>.md` (create directory if missing)
-   - Spike files: `.claude/spikes/<tech-slug>.<ext>` (create directory if missing)
+   - Spike files: `/tmp/superpowers-spikes/<tech-slug>.<ext>` (create directory if missing). Ephemeral — kept so the user can inspect the code that produced the findings, not durable evidence. On macOS, files in `/tmp` are cleaned by the system after ~3 days of inactivity.
 
 2. **Build tech inventory** — extract every SDK / library / API / type / method / class / response shape named in the spec.
 
@@ -64,7 +64,7 @@ NO SUBAGENT DISPATCH WITHOUT USER-APPROVED TECH INVENTORY
 |---|---|---|
 | **T0** | Stdlib OR already used in current codebase | Inline annotation: `verified at <file>:<line> on <YYYY-MM-DD>`. Citation REQUIRED. No subagent. |
 | **T1** | Stable API, official docs clear, no edge-case behavior needed | Dispatch doc-verifier subagent. Doc reading only, NO code execution. |
-| **T2** | Recent version / known breaking changes / undocumented behavior / composite signature / agent uncertainty about return shape | Dispatch spike-runner subagent. Persistent spike file required. |
+| **T2** | Recent version / known breaking changes / undocumented behavior / composite signature / agent uncertainty about return shape | Dispatch spike-runner subagent. Spike file written to `/tmp/superpowers-spikes/` so the user can inspect the code that produced the findings (ephemeral, not durable). |
 
 **Disambiguation:** "I know this SDK from training" is NEVER a T0 justification. T0 requires `git grep` evidence in the current repo with file path and line number.
 
@@ -140,7 +140,7 @@ If a T2 spike fails (auth missing, runtime error, env not available):
 - The tech entry's `Verified facts` stays empty
 - The failure (with cause) goes into `Open assumptions`
 - Workflow does NOT block — the plan downstream is informed of the fragility
-- The spike file is kept for re-run by future agents
+- The spike file is kept at `/tmp/superpowers-spikes/<tech-slug>.<ext>` so the user can inspect what was attempted (ephemeral; `/tmp` is cleaned after ~3 days on macOS). Do not assume future agents can re-run it — if research is repeated, treat the spike as needing to be recreated.
 
 ## Red Flags
 
