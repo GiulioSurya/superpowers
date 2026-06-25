@@ -5,7 +5,7 @@ Use when dispatching a Tier 2 subagent that must verify behavior by writing and 
 **Purpose:** Empirically verify SDK behavior the docs alone cannot confirm. Produces a structured fragment for the research artifact plus an ephemeral spike file in `/tmp/superpowers-spikes/` so the user can inspect the code that produced the findings.
 
 ```
-Task tool (general-purpose):
+Subagent (general-purpose):
   description: "Spike {TECH_NAME}"
   prompt: |
     You are a senior engineer running a throwaway technical spike to verify behavior

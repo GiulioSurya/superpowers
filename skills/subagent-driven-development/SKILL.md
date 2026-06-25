@@ -178,6 +178,15 @@ final whole-branch review. When you fill a reviewer template:
   Y"). The reviewer's template already carries the process rules (YAGNI,
   test hygiene, review method) — the constraints block is for what THIS
   project's spec demands.
+- **Only when a research artifact exists** for this work
+  (`docs/superpowers/research/<spec>.md`), add one binding line to that
+  constraints block: every mock of an external dependency must carry a
+  `mock-source:` comment citing its `Mock contract` in the artifact — an
+  uncited mock is bluffed. The orchestrator already passes the artifact
+  into the implementer dispatch (see *Dispatch Context — Research
+  Artifact*); this line makes the reviewer the catch-net. **If no
+  artifact exists, skip this** — an SDD run with no research artifact has
+  no Mock contract, and the rule does not apply.
 - Hand the reviewer its diff as a file: run this skill's
   `scripts/review-package BASE HEAD` and pass the reviewer the file path
   it prints (or, without bash: `git log --oneline`, `git diff --stat`,
@@ -269,7 +278,7 @@ a ledger file, not only in todos.
 
 **Mandatory in every implementer dispatch:**
 
-- The path to the research artifact when one exists for this work, e.g. `docs/superpowers/research/<spec-name>.md`. Paste it into the implementer prompt's `## Research artifact` slot (see `./implementer-prompt.md`).
+- The path to the research artifact when one exists for this work, e.g. `docs/superpowers/research/<spec-name>.md`. Paste it into the implementer prompt's `## Research artifact` slot (see [implementer-prompt.md](implementer-prompt.md)).
 - An explicit pointer to the `## Per-tech findings → ### Mock contract` subsections for every external dependency the task will mock. The subagent reads these as the **single source of truth** for the shape of any mock (return values, error types, side effects).
 - The instruction that every mock the subagent writes must carry a citation comment immediately above it:
   `# mock-source: docs/superpowers/research/<spec>.md#mock-contract-<tech>` (the implementer-prompt template enforces this).

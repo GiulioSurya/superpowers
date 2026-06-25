@@ -5,7 +5,7 @@ Use when dispatching a Tier 1 subagent for doc-only verification of a technology
 **Purpose:** Verify API surface against authoritative sources WITHOUT executing code. Returns a structured fragment for the research artifact.
 
 ```
-Task tool (general-purpose):
+Subagent (general-purpose):
   description: "Verify {TECH_NAME} docs"
   prompt: |
     You are a senior engineer verifying technical claims against authoritative sources.

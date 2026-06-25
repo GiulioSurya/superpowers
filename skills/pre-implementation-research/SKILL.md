@@ -48,7 +48,7 @@ NO SUBAGENT DISPATCH WITHOUT USER-APPROVED TECH INVENTORY
 
 4. **Present the tech inventory to the user — MANDATORY GATE.** Output the full inventory + classification table directly in the conversation, in markdown, BEFORE dispatching any subagent. Include for every entry: tech name, exact version, tier, justification (citation for T0, reason for T1/T2). Then explicitly ask the user to confirm or correct: (a) completeness of the tech list against the spec, (b) version pins, (c) tier assignments. Wait for explicit approval. Do NOT proceed to step 5 on coordinator initiative — even if the inventory looks obvious. The user is the only reader who can catch missing tech and misclassifications before they propagate into wasted subagent runs and a bluffed plan.
 
-5. **Dispatch subagents in parallel** for T1 and T2 — single message, multiple Task tool calls. T0 entries are inlined directly with citation, no subagent needed.
+5. **Dispatch subagents in parallel** for T1 and T2 — multiple subagent dispatches in one message. T0 entries are inlined directly with citation, no subagent needed.
    - T1 → use `./doc-verifier-prompt.md`
    - T2 → use `./spike-runner-prompt.md`
 
@@ -142,7 +142,7 @@ Otherwise every amendment MUST use this exact structure (no shortcuts, no free-f
 - <YYYY-MM-DD HH:MM> <tech>@<version> (Tier) → result/duration
 ```
 
-The sections passed to downstream subagents (in `writing-plans`, `executing-plans`, and `subagent-driven-development` dispatch context) are: **Verified facts**, **Constraints**, **Open assumptions**, **Mock contract**. The Mock contract is what `subagent-driven-development`'s implementer subagents read when constructing mocks for external dependencies — without it in the dispatch context, the subagent has no authoritative shape to cite.
+Downstream skills read the **spec**, not this artifact — the spec is the single source of truth. Step 7 patches the spec with the verified findings, so the version pins and limits become `writing-plans`' **Global Constraints**, and the verified signatures become its per-task **Interfaces**; they reach implementers through spec → plan → task brief, never as pasted artifact text. The one exception is the **Mock contract**: it stays in this artifact and is read by `subagent-driven-development`'s implementer subagents when they build mocks — the orchestrator passes the artifact path into each implementer dispatch (see that skill's *Dispatch Context — Research Artifact* section). Without that path in the dispatch, the subagent has no authoritative shape to cite.
 
 ## Spec Amendments After Research
 
@@ -190,9 +190,9 @@ If a T2 spike fails (auth missing, runtime error, env not available):
 
 ## Integration
 
-- **Precedes:** `superpowers:writing-plans` (the plan reads the artifact)
+- **Precedes:** `superpowers:writing-plans` — which reads the **spec** (patched in step 7), not this artifact directly
 - **Follows:** spec approval (manual or via `superpowers:brainstorming`)
-- **Consumed by:** `superpowers:executing-plans` and `superpowers:subagent-driven-development` — implementer subagents receive `Verified facts` + `Constraints` + `Open assumptions` in their dispatch context
+- **Consumed by:** `superpowers:executing-plans` and `superpowers:subagent-driven-development` — the verified findings reach implementers through spec → plan → task brief (as Global Constraints and Interfaces), while the **Mock contract** is read directly from this artifact by the implementer subagents (the orchestrator passes the artifact path into each dispatch)
 
 ## Templates
 
