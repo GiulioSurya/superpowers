@@ -20,6 +20,8 @@ Bridge between approved specs and `superpowers:writing-plans`. Forces explicit v
 - No external SDK/API involvement (pure internal refactor)
 - The spec itself is a research document
 
+**Ad-hoc mode (no spec).** When invoked from `superpowers:brainstorming`'s bounded path (external-surface check) or from `subagent-driven-development`'s NEEDS_CONTEXT escalation, no spec file exists. The tech inventory comes from the approved in-chat design (or the dispatch context), scoped to the new tech only. Everything else holds unchanged: user-approved inventory gate, tier classification, subagent dispatch, artifact at `docs/superpowers/research/<topic>.md` with Mock contracts. Steps that patch the spec (step 7) don't apply — a finding that contradicts the approved design goes back to your human partner in chat before implementation.
+
 ## The Iron Rule
 
 ```

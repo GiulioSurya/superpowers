@@ -73,6 +73,7 @@ artifact, never the approval.
 | "The spike works, so I'll keep the code" | A spike's output is an answer. Keeping the code is a new request — classify it. |
 | "It grew, but I'm almost done — no need to re-classify" | Hidden complexity upgrades the path mid-task. Stop and say so. |
 | "They approved the spike, so the follow-up change is approved too" | Each task gets its own classification and its own approval. |
+| "It's bounded, so I'll just check the SDK docs myself before coding" | An in-session doc skim leaves no artifact and no Mock contract for the tests to cite. If the tech has no grep-verifiable usage in this repo, run pre-implementation-research ad-hoc — scaled down, never skipped. |
 
 ## Checklist
 
@@ -91,7 +92,8 @@ your path and complete them in order.
 2. **Ask clarifying questions** — one at a time, the ones that matter
 3. **Present short design in chat** — approach, files touched, testing
 4. **Get approval** — STOP and wait for an explicit yes; presenting the design and starting in the same breath is skipping the gate
-5. **Implement** — proceed with the normal development workflow (TDD applies); no plan document
+5. **External-surface check** — if the approved design introduces an SDK / library / API with no grep-verifiable usage in this repo, invoke `superpowers:pre-implementation-research` in ad-hoc mode (the approved in-chat design supplies the tech inventory; no spec needed) before implementing. Reading the docs yourself in-session is not a substitute: it leaves no artifact and no Mock contract for the tests to cite. If every external surface in the design is already grep-verifiable here, skip this step.
+6. **Implement** — proceed with the normal development workflow (TDD applies); no plan document
 
 **Architectural:**
 1. **Explore project context** — check files, docs, recent commits
@@ -114,6 +116,8 @@ digraph brainstorming {
     "Present short design in chat" [shape=box];
     "Human approves?" [shape=diamond];
     "Investigate; report recommendation" [shape=doublecircle];
+    "Design introduces SDK/API\nnot grep-verifiable in repo?" [shape=diamond];
+    "Run pre-implementation-research\n(ad-hoc, design as inventory)" [shape=box];
     "Implement via normal workflow (no plan doc)" [shape=doublecircle];
     "Explore project context" [shape=box];
     "Ask clarifying questions" [shape=box];
@@ -135,7 +139,10 @@ digraph brainstorming {
     "Ask clarifying questions (bounded)" -> "Present short design in chat";
     "Present short design in chat" -> "Human approves?";
     "Human approves?" -> "Investigate; report recommendation" [label="spike: yes"];
-    "Human approves?" -> "Implement via normal workflow (no plan doc)" [label="bounded: yes"];
+    "Human approves?" -> "Design introduces SDK/API\nnot grep-verifiable in repo?" [label="bounded: yes"];
+    "Design introduces SDK/API\nnot grep-verifiable in repo?" -> "Run pre-implementation-research\n(ad-hoc, design as inventory)" [label="yes"];
+    "Design introduces SDK/API\nnot grep-verifiable in repo?" -> "Implement via normal workflow (no plan doc)" [label="no"];
+    "Run pre-implementation-research\n(ad-hoc, design as inventory)" -> "Implement via normal workflow (no plan doc)";
     "Hidden complexity? Upgrade path" -> "Classify: spike / bounded / architectural";
     "Explore project context" -> "Ask clarifying questions";
     "Ask clarifying questions" -> "Propose 2-3 approaches";
@@ -157,8 +164,11 @@ may invoke after brainstorming are `pre-implementation-research` (the
 default) or `writing-plans` (only when the spec meets
 pre-implementation-research's "Don't use when" criteria) — never
 frontend-design, mcp-builder, or any other implementation skill.
-Bounded: after approval, implementation proceeds directly through the
-normal development workflow; no plan document. Spike: the terminal
+Bounded: after approval, implementation proceeds through the normal
+development workflow with no plan document — but the external-surface
+check (bounded checklist step 5) runs first: a design that introduces
+an SDK/API with no grep-verifiable usage in this repo gets an ad-hoc
+`pre-implementation-research` run before any code. Spike: the terminal
 state is a reported recommendation.
 
 ## The Process
