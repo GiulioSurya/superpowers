@@ -29,8 +29,8 @@ enters your context and you never write it: the only thing you write is the disp
 | Lens | Agent | Looks for |
 |---|---|---|
 | Adversarial | `panel-adversarial` | the input, race or sequence that makes a mechanism produce a wrong outcome |
-| Critical | `panel-critical` | wrong or missing decisions, silent reversals, cheaper alternatives |
-| Quality + scalability | `panel-quality-scalability` | anchors, symbols, test breaks, callers; load at 10×, growth, god-files |
+| Critical | `panel-critical` | wrong or missing decisions, silent reversals, cheaper alternatives; load at 10×, growth, god-files |
+| QA | `panel-qa` | anchors, symbols, test breaks, callers; requirement → acceptance criterion → red-first test, missing cases, regression locks, fixtures, exit criteria |
 | Security / tenancy | `panel-security-tenancy` | RLS as it would ship, cross-tenant reach, secrets, service-role writes |
 
 Run all four when the spec touches a database or an edge function; the first three otherwise.
@@ -78,8 +78,8 @@ Four `Agent` calls in one message, same dispatch text for all. The text has four
    is enough — it removes the search, not the verification, and took first-round tool calls from 45-65 to 30-38
    per lens.
 3. **The claims to attack hardest** — the spec's own list, numbered.
-4. **Read-only DB access** for the adversarial and security lenses: project id and the exact MCP tool selector,
-   SELECT only.
+4. **Read-only DB access** for the adversarial, security and QA lenses (the QA lens uses it to check that the
+   fixtures and test data the verification needs exist): project id and the exact MCP tool selector, SELECT only.
 
 If the spec is a delta on a revision already shipped in part: name the commit that is the delta, and say the
 untouched part is out of scope and does not drive the verdict.
@@ -164,6 +164,6 @@ one round. Four lenses on a full loop cost in the order of a million agent token
 
 ## Reference files
 
-- `agents/panel-adversarial.md`, `agents/panel-critical.md`, `agents/panel-quality-scalability.md`,
+- `agents/panel-adversarial.md`, `agents/panel-critical.md`, `agents/panel-qa.md`,
   `agents/panel-security-tenancy.md` — the lens system prompts, at the plugin root. Edit a lens there; the change
   is live at the next dispatch.

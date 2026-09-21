@@ -28,6 +28,11 @@ Its ruleset is the real `ponytail-review` skill, injected into the agent by the 
 thing as `repo/file:line`; a lean-up that touches a mechanism the spec mandates is rejected by citing the spec
 section, and the lens says so under "Rejected lean-ups" instead of proposing it.
 
+On a plan the QA lens (`panel-qa`) does more than on a spec: it runs the literal text in a scratch directory —
+parsers, compilers, the tests themselves — reads every test asking "can this fail?", checks that the task order is
+executable red-first, and maps every spec acceptance criterion to a plan task and back. It repeats your §1
+self-check independently; it does not replace it.
+
 All five run on every plan. Ponytail and security have had zero overlap with the other three: each found a class
 of its own.
 
@@ -61,13 +66,13 @@ intentional test breaks against `grep` reality.
 
 The four parts of the spec dispatch, plus three:
 
-5. **The spec's path and closing revision** — ponytail cites its sections to reject a lean-up, quality checks the
+5. **The spec's path and closing revision** — ponytail cites its sections to reject a lean-up, QA checks the
    plan's verification against its rollout, critical hunts silent deviations from it.
-6. **A scratch directory and the permission to execute there**, for the adversarial and quality lenses: write the
+6. **A scratch directory and the permission to execute there**, for the adversarial and QA lenses: write the
    plan's code blocks to it and run them; nothing is written anywhere else. In the runs that granted it, the
    lenses with a mandate to execute found every real blocker.
 7. **Parts written at contract level**, if any (another engineer will detail them): say so, and that they are
-   reviewed for consistency with the spec, not for missing literal code. Otherwise the quality lens spends its
+   reviewed for consistency with the spec, not for missing literal code. Otherwise the QA lens spends its
    budget there.
 
 Same text for all five agents, one message, no `model` parameter.
@@ -116,5 +121,5 @@ and 10-17 minutes of wall clock.
 
 - `agents/panel-ponytail.md` — the fifth lens, at the plugin root; its ruleset arrives through
   `skills: [ponytail-review]`, its persona is vendored verbatim in the file.
-- `agents/panel-adversarial.md`, `agents/panel-critical.md`, `agents/panel-quality-scalability.md`,
+- `agents/panel-adversarial.md`, `agents/panel-critical.md`, `agents/panel-qa.md`,
   `agents/panel-security-tenancy.md` — shared with the spec loop.
