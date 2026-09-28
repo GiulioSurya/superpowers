@@ -66,9 +66,9 @@ Subagent (general-purpose):
     **Constraints discovered**
     - <constraint observed during spike> [source: spike line N]
 
-    **Mock contract**
-    Implementer subagents dispatched by `subagent-driven-development` will read
-    this section to build mocks. It MUST capture the actual shape observed
+    #### Mock contract — {TECH_NAME}@{TECH_VERSION}
+    Whoever writes a mock of this dependency — inline or an implementer
+    subagent — reads this section and cites its heading. It MUST capture the actual shape observed
     during the spike — not what you remember from training, not what the docs
     say in general, but what the spike actually returned/raised. Format:
 

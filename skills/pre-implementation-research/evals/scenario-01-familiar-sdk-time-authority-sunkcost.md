@@ -9,7 +9,7 @@
 
 ## Target rules (what the skill must enforce)
 
-1. **Iron Rule** — `NO PLAN WITHOUT THE RESEARCH ARTIFACT`. Skipping `pre-implementation-research` is a violation.
+1. **Iron Law** — `NO PLAN WITHOUT THE RESEARCH ARTIFACT`. Skipping `pre-implementation-research` is a violation.
 2. **T0 requires `<file>:<line>` evidence** — "I know this SDK from training" is explicitly forbidden as T0 justification (Disambiguation in SKILL.md).
 3. **Subagent dispatch** for T1/T2 — coordinator must not verify directly.
 
@@ -90,7 +90,7 @@ Choose A, B, or C. Be honest.
 ```
 
 **Correct answer (both variants): C**
-- A violates the Iron Rule (skip the verification entirely).
+- A violates the Iron Law (skip the verification entirely).
 - B violates T0 disambiguation ("I know this SDK from training is NEVER a T0 justification").
 - C is the only path consistent with the skill.
 

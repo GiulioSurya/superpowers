@@ -60,9 +60,9 @@ Subagent (general-purpose):
     - <constraint> [source: <link>]
     - <constraint> [source: <link>]
 
-    **Mock contract**
-    Implementer subagents dispatched by `subagent-driven-development` will read
-    this section to build mocks. Capture ONLY what the authoritative docs
+    #### Mock contract — {TECH_NAME}@{TECH_VERSION}
+    Whoever writes a mock of this dependency — inline or an implementer
+    subagent — reads this section and cites its heading. Capture ONLY what the authoritative docs
     document explicitly — if a field, error condition, or side effect is not
     documented, do NOT invent it; list it under "Couldn't verify" instead.
     Format:

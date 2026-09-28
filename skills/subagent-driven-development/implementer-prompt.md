@@ -32,7 +32,7 @@ Subagent (general-purpose):
     Every mock of those dependencies follows its Mock contract — nothing
     added from memory — and carries this comment immediately above it
     (superpowers:test-driven-development, research-artifact rule):
-      # mock-source: docs/superpowers/research/<spec>.md#mock-contract-<tech>
+      # mock-source: docs/superpowers/research/<spec>.md, section "Mock contract — <tech>@<version>"
       # verified <YYYY-MM-DD> via <T0 file:line | T1 doc URL | T2 spike path>
 
     Case B (no artifact for this work): paste exactly

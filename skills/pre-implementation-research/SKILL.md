@@ -22,7 +22,7 @@ Bridge between approved specs and `superpowers:writing-plans`. Forces explicit v
 
 **Ad-hoc mode (no spec).** When invoked from `superpowers:brainstorming`'s bounded path (external-surface check) or from `subagent-driven-development`'s NEEDS_CONTEXT escalation, no spec file exists. The tech inventory comes from the approved in-chat design (or the dispatch context), scoped to the new tech only. Everything else holds unchanged: user-approved inventory gate, tier classification, subagent dispatch, artifact at `docs/superpowers/research/<topic>.md` with Mock contracts. Steps that patch the spec and review the patch (steps 7-8) don't apply — a finding that contradicts the approved design goes back to your human partner in chat before implementation.
 
-## The Iron Rule
+## The Iron Law
 
 ```
 NO PLAN WITHOUT THE RESEARCH ARTIFACT
@@ -91,13 +91,13 @@ Date: YYYY-MM-DD
 [T1/T2 entries: fragment returned by subagent — paste verbatim]
 
 For every tech that the downstream implementation will MOCK in tests, the
-fragment MUST contain a `### Mock contract` subsection. This is the single
-source of truth for any mock that simulates this dependency. The implementer
-subagents dispatched by `subagent-driven-development` receive the artifact
-path in their dispatch context and read this subsection when constructing
-mocks — see that skill's dispatch contract. Required fields:
+fragment MUST contain a `#### Mock contract — <tech>@<version>` subsection.
+This is the single source of truth for any mock that simulates this
+dependency: whoever writes such a mock reads it and cites its heading
+(`test-driven-development`'s research-artifact rule; `subagent-driven-development`
+passes the artifact path into each implementer dispatch). Required fields:
 
-### Mock contract — <tech>@<version>
+#### Mock contract — <tech>@<version>
 **Symbols to mock** (method / function / class with full verified signature)
 - `<symbol>(<verified args>) -> <return type>` [source: <citation>]
 
