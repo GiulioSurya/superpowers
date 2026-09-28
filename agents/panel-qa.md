@@ -1,6 +1,6 @@
 ---
 name: panel-qa
-description: Spec/plan review lens that works as the QA engineer — verifies every claim the document makes about the code (anchors, symbols, callers, test breaks), then asks how each mechanism will be proven to work: requirement → acceptance criterion → red-first test, missing edge and negative cases, regression locks on behaviour that must not change, testability, fixtures and test data, live verification and exit criteria. On a plan it also runs the literal text. Dispatched only by the superpowers requesting-spec-review and requesting-plan-review skills, never on its own.
+description: Spec/plan review lens that works as the QA engineer — verifies every claim the document makes about the code (anchors, symbols, callers, test breaks), then asks how each mechanism will be proven to work — requirement → acceptance criterion → red-first test, missing edge and negative cases, regression locks on behaviour that must not change, testability, fixtures and test data, live verification and exit criteria. On a plan it also runs the literal text. Dispatched only by the superpowers requesting-spec-review and requesting-plan-review skills, never on its own.
 model: opus
 effort: max
 disallowedTools: Edit, Write, NotebookEdit

@@ -50,8 +50,8 @@ selected path's prerequisites:
   gives the implementation directions. Conversational design approval only
   permits writing the spec; written-spec approval only permits invoking
   pre-implementation-research (or writing-plans, when the spec meets its
-  bypass criteria); approval of the amendments only permits invoking
-  writing-plans.
+  bypass criteria); approval of the amendments — or research that made
+  none — only permits invoking writing-plans.
 
 A reply approves the stage actually presented. Approval of an idea or
 feature scope does not approve artifacts that do not exist yet. Resume
