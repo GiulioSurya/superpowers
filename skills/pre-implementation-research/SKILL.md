@@ -20,7 +20,7 @@ Bridge between approved specs and `superpowers:writing-plans`. Forces explicit v
 - No external SDK/API involvement (pure internal refactor)
 - The spec itself is a research document
 
-**Ad-hoc mode (no spec).** When invoked from `superpowers:brainstorming`'s bounded path (external-surface check) or from `subagent-driven-development`'s NEEDS_CONTEXT escalation, no spec file exists. The tech inventory comes from the approved in-chat design (or the dispatch context), scoped to the new tech only. Everything else holds unchanged: user-approved inventory gate, tier classification, subagent dispatch, artifact at `docs/superpowers/research/<topic>.md` with Mock contracts. Steps that patch the spec (step 7) don't apply — a finding that contradicts the approved design goes back to your human partner in chat before implementation.
+**Ad-hoc mode (no spec).** When invoked from `superpowers:brainstorming`'s bounded path (external-surface check) or from `subagent-driven-development`'s NEEDS_CONTEXT escalation, no spec file exists. The tech inventory comes from the approved in-chat design (or the dispatch context), scoped to the new tech only. Everything else holds unchanged: user-approved inventory gate, tier classification, subagent dispatch, artifact at `docs/superpowers/research/<topic>.md` with Mock contracts. Steps that patch the spec and review the patch (steps 7-8) don't apply — a finding that contradicts the approved design goes back to your human partner in chat before implementation.
 
 ## The Iron Rule
 
@@ -56,9 +56,11 @@ NO SUBAGENT DISPATCH WITHOUT USER-APPROVED TECH INVENTORY
 
 6. **Aggregate fragments** into the artifact (template below). Coordinator never reads raw docs or spike code — only structured fragments returned by subagents.
 
-7. **Apply spec amendments** (if any). Research findings often contradict assumptions baked into the spec. If the artifact's `## Required spec amendments` section is non-empty, patch the spec file NOW — before `writing-plans`. See "Spec Amendments After Research" section below.
+7. **Apply spec amendments** (if any). Research findings often contradict assumptions baked into the spec. If the artifact's `## Required spec amendments` section is non-empty, patch the spec file NOW — before `writing-plans`. A Mock contract in the artifact always brings one amendment: the mock constraint line. See "Spec Amendments After Research" section below.
 
-8. **Hand off** — pass the artifact path in the dispatch context of `writing-plans`. The spec at this point already reflects research findings; `writing-plans` reads only the spec.
+8. **Show the amendments to the user — GATE.** If step 7 changed the spec, show the user the applied amendments (the spec's diff) and wait for explicit approval before handing off. Their approval of the spec covered the version they read, not the amended one. No amendments: say so in one line and go on.
+
+9. **Hand off** — pass the artifact path in the dispatch context of `writing-plans`. The spec at this point already reflects research findings; `writing-plans` reads only the spec.
 
 ## Tier Classification
 
@@ -144,7 +146,7 @@ Otherwise every amendment MUST use this exact structure (no shortcuts, no free-f
 - <YYYY-MM-DD HH:MM> <tech>@<version> (Tier) → result/duration
 ```
 
-Downstream skills read the **spec**, not this artifact — the spec is the single source of truth. Step 7 patches the spec with the verified findings, so the version pins and limits become `writing-plans`' **Global Constraints**, and the verified signatures become its per-task **Interfaces**; they reach implementers through spec → plan → task brief, never as pasted artifact text. The one exception is the **Mock contract**: it stays in this artifact and is read by `subagent-driven-development`'s implementer subagents when they build mocks — the orchestrator passes the artifact path into each implementer dispatch (see that skill's *Dispatch Context — Research Artifact* section). Without that path in the dispatch, the subagent has no authoritative shape to cite.
+Downstream skills read the **spec**, not this artifact — the spec is the single source of truth. Step 7 patches the spec with the verified findings, so the version pins and limits become `writing-plans`' **Global Constraints**, and the verified signatures become its per-task **Interfaces**; they reach implementers through spec → plan → task brief, never as pasted artifact text. The one exception is the **Mock contract**: it stays in this artifact and is read by whoever builds a mock, under `test-driven-development`'s research-artifact rule — you inline, or a `subagent-driven-development` implementer whose orchestrator passes the artifact path into each dispatch (see that skill's *Dispatch Context — Research Artifact* section). What reaches the spec is the mock constraint line (step 7), which the plan's Global Constraints carry to every reviewer.
 
 ## Spec Amendments After Research
 
@@ -158,6 +160,7 @@ The research artifact is **evidence**. The spec is the **single source of truth*
    This makes the chain auditable in both directions: a reader of the spec sees why a section changed and where the evidence lives; a reader of the artifact can grep the spec for `research/` and confirm every amendment landed. Without the back-reference, the spec patch looks like a free rewrite — exactly the bluff signature this skill exists to prevent.
 3. Each applied amendment is marked in the artifact: `Applied at <YYYY-MM-DD HH:MM>` (or commit SHA if version controlled).
 4. If the section is genuinely empty, the artifact must say so explicitly: `_no amendments — spec assumptions held against research_`. Empty without a statement is a workflow gap.
+5. **The mock constraint.** For every tech with a Mock contract, one amendment adds this line to the spec's constraints section: `Mocks of <tech>@<version> follow the Mock contract in docs/superpowers/research/<name>.md and carry its mock-source comment.` `writing-plans` copies the spec's constraints into the plan's Global Constraints, so the reviewer of either execution mode — the task reviewer of `subagent-driven-development`, the final reviewer of `executing-plans` — checks every mock against it.
 
 **Why this matters:** if the spec disagrees with verified reality at hand-off time, the plan author has two contradictory inputs. They will either (a) follow the spec and write a plan based on bluffs, (b) ignore the spec and break the document chain, or (c) burn time reconciling. Patching the spec eliminates the divergence at its source. Single source of truth survives.
 
@@ -184,17 +187,18 @@ If a T2 spike fails (auth missing, runtime error, env not available):
 | Tech inventory says "latest" or omits version | "Latest" is a moving target. Breaking changes between versions are the #1 cause of drift. Every entry needs an exact version, range, or pinned commit. |
 | Artifact has `Required spec amendments` items but the spec file wasn't patched | Workflow step 7 was skipped. `writing-plans` downstream will read a spec that contradicts research → broken plan from bluffed assumptions. Apply the amendments to the spec NOW, then mark them `Applied at <timestamp>` in the artifact. |
 | "I'll let writing-plans figure out the contradictions between spec and artifact" | `writing-plans` reads the spec, not the artifact. It cannot reconcile silently. The contradiction must be resolved at the spec, not deferred. |
+| "The amendments are just facts from the docs — straight to writing-plans" | The user approved the spec they read; the amended spec is a different document. Show the diff and wait (step 8). |
 | "The inventory is obvious, I'll dispatch subagents directly" | The inventory MUST be shown to the user before any T1/T2 dispatch (workflow step 4). Misclassifications and missing tech are the most common failure mode and only the user can catch them — the agent cannot self-audit its own blind spots. Skipping the gate burns subagent runs on the wrong scope and lets bluffs survive into the artifact. |
 | "I already mentioned the techs in passing while planning" | A passing mention is not the inventory gate. Step 4 requires the structured table (tech / version / tier / justification) presented as a discrete checkpoint with an explicit ask for approval. |
 | "I patched the spec, the amendment work is done" | Patching without the `<!-- amended per docs/superpowers/research/<name>.md amendment <N> on <YYYY-MM-DD> -->` back-reference is half the job. Future readers can't audit the spec change against the artifact, and `writing-plans` reads a spec that looks freely rewritten. The back-reference is mandatory, not stylistic. |
 | "Free-form prose for the amendment is fine, the gist is clear" | The structured template (numbered amendment, breadcrumbs, current/replacement blockquotes, issue, status) exists because free-form amendments routinely lose the verbatim "current text" or skip the spec section reference, and downstream readers can't apply them mechanically. Use the template verbatim. |
-| Tech has Verified facts but no Mock contract, and the plan will mock it | Bluff signature on the test side: the plan will mock something whose structure (return shape, errors, side effects) was never captured. The implementer subagent dispatched by `subagent-driven-development` won't have the contract to cite in its dispatch context — and will either bluff the shape or block. Every tech the plan mocks needs a Mock contract subsection. |
+| Tech has Verified facts but no Mock contract, and the plan will mock it | Bluff signature on the test side: the plan will mock something whose structure (return shape, errors, side effects) was never captured. Whoever writes that mock — a `subagent-driven-development` implementer or you inline under `test-driven-development`'s research-artifact rule — has no contract to follow, and will either bluff the shape or block. Every tech the plan mocks needs a Mock contract subsection. |
 
 ## Integration
 
-- **Precedes:** `superpowers:writing-plans` — which reads the **spec** (patched in step 7), not this artifact directly
-- **Follows:** spec approval (manual or via `superpowers:brainstorming`)
-- **Consumed by:** `superpowers:executing-plans` and `superpowers:subagent-driven-development` — the verified findings reach implementers through spec → plan → task brief (as Global Constraints and Interfaces), while the **Mock contract** is read directly from this artifact by the implementer subagents (the orchestrator passes the artifact path into each dispatch)
+- **Precedes:** `superpowers:writing-plans` — which reads the **spec** (patched in step 7, amendments approved by the user in step 8), not this artifact directly
+- **Follows:** spec approval (manual or via `superpowers:brainstorming`, after `superpowers:requesting-spec-review`)
+- **Consumed by:** `superpowers:executing-plans` and `superpowers:subagent-driven-development` — the verified findings reach implementers through spec → plan → task brief (as Global Constraints and Interfaces), while the **Mock contract** is read directly from this artifact by whoever writes a mock (`superpowers:test-driven-development`'s research-artifact rule; `subagent-driven-development` passes the artifact path into each implementer dispatch)
 
 ## Templates
 

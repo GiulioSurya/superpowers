@@ -219,6 +219,13 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 - Keep test-only code in test utilities, out of production classes
 - Understand a dependency's side effects before mocking it
 
+**When a research artifact exists for this work** (`docs/superpowers/research/<name>.md`, written by superpowers:pre-implementation-research): a mock of an external dependency that has a `Mock contract` section there follows that contract — return shape, errors and side effects exactly as written, nothing added from memory — and carries this comment, in the file's comment syntax, immediately above it:
+
+```python
+# mock-source: docs/superpowers/research/<name>.md#mock-contract-<tech>
+# verified <YYYY-MM-DD> via <T0 file:line | T1 doc URL | T2 spike path>
+```
+
 ## Common Rationalizations
 
 | Excuse | Reality |
@@ -301,6 +308,7 @@ Before marking work complete:
 - [ ] All tests pass
 - [ ] Output pristine (no errors, warnings)
 - [ ] Tests use real code (mocks only if unavoidable)
+- [ ] With a research artifact: every mock of a dependency it has a Mock contract for follows it and carries the `mock-source:` comment
 - [ ] Edge cases and errors covered
 
 Can't check all boxes? You skipped TDD. Start over.

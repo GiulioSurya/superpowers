@@ -25,20 +25,13 @@ Subagent (general-purpose):
 
     Case A (artifact exists): paste the path, e.g.
       `docs/superpowers/research/2026-05-15-streaming-handler.md`
+    and the `Mock contract` subsections for every external dependency the
+    task will mock, e.g. `anthropic@0.45+` → "Per-tech findings → Mock
+    contract — anthropic@0.45+".
 
-    Then list the `### Mock contract` subsections relevant to this task, one
-    per external dependency the task will mock:
-      - `anthropic@0.45+` → Mock contract at section "Per-tech findings →
-        Mock contract — anthropic@0.45+"
-      - `boto3@1.34+` → ...
-
-    The implementer subagent MUST read each Mock contract before writing the
-    corresponding mock. The Return shape / Errors / Side effects in the
-    contract are the single source of truth — do NOT augment with fields
-    from training memory.
-
-    Every mock the subagent writes carries this citation comment immediately
-    above it:
+    Every mock of those dependencies follows its Mock contract — nothing
+    added from memory — and carries this comment immediately above it
+    (superpowers:test-driven-development, research-artifact rule):
       # mock-source: docs/superpowers/research/<spec>.md#mock-contract-<tech>
       # verified <YYYY-MM-DD> via <T0 file:line | T1 doc URL | T2 spike path>
 
@@ -146,12 +139,8 @@ Subagent (general-purpose):
     - Did I follow TDD if required?
     - Are tests comprehensive?
     - Is the test output pristine (no stray warnings or noise)?
-    - Does every mock of an external dependency carry a `mock-source:` citation
-      comment pointing at the relevant `Mock contract` subsection of the research
-      artifact? Mocks without this comment are bluffed — replace them with a
-      verified mock or switch to the real dep.
-    - Did I import fields, errors, or side effects from the Mock contract verbatim,
-      WITHOUT augmenting from training memory?
+    - With a research artifact: does every mock follow its Mock contract and
+      carry the `mock-source:` comment?
 
     If you find issues during self-review, fix them now before reporting.
 
