@@ -23,15 +23,15 @@ are sure about.
 ## The lenses are agents, not prompts
 
 Each lens lives in `agents/panel-<lens>.md` at the plugin root. The body of that file is the lens's system prompt;
-Claude Code loads it when you dispatch `Agent(subagent_type: "panel-<lens>", prompt: ...)`. The lens text never
+Claude Code loads it when you dispatch `Agent(subagent_type: "superpowers:panel-<lens>", prompt: ...)`. The lens text never
 enters your context and you never write it: the only thing you write is the dispatch text in §2.
 
 | Lens | Agent | Looks for |
 |---|---|---|
-| Adversarial | `panel-adversarial` | the input, race or sequence that makes a mechanism produce a wrong outcome |
-| Critical | `panel-critical` | wrong or missing decisions, silent reversals, cheaper alternatives; load at 10×, growth, god-files |
-| QA | `panel-qa` | anchors, symbols, test breaks, callers; requirement → acceptance criterion → red-first test, missing cases, regression locks, fixtures, exit criteria |
-| Security / tenancy | `panel-security-tenancy` | RLS as it would ship, cross-tenant reach, secrets, service-role writes |
+| Adversarial | `superpowers:panel-adversarial` | the input, race or sequence that makes a mechanism produce a wrong outcome |
+| Critical | `superpowers:panel-critical` | wrong or missing decisions, silent reversals, cheaper alternatives; load at 10×, growth, god-files |
+| QA | `superpowers:panel-qa` | anchors, symbols, test breaks, callers; requirement → acceptance criterion → red-first test, missing cases, regression locks, fixtures, exit criteria |
+| Security / tenancy | `superpowers:panel-security-tenancy` | RLS as it would ship, cross-tenant reach, secrets, service-role writes |
 
 Run all four when the spec touches a database or an edge function; the first three otherwise.
 
@@ -144,7 +144,9 @@ mid-loop interrupts it without adding information.
 | `STOP-CAP` | hard cap: 2 full rounds + 1 delta | residual BLOCKER/MAJOR → your human partner; MINOR/NIT → tasks in the plan |
 | `STOP-CONFLICT` | two lenses contradict each other on the same finding for two rounds | the only mid-loop question to your human partner |
 
-State the reason and the round numbers in your reply. Then `superpowers:writing-plans`.
+State the reason and the round numbers in your reply. Then the spec goes to your human partner for review
+(`superpowers:brainstorming`'s User Review Gate); after their approval, `superpowers:pre-implementation-research` —
+or `superpowers:writing-plans` when the spec meets its bypass criteria.
 
 Round 1 finds structural errors; round 2 finds the regressions your consolidation introduced; round 3 returns
 anchoring nits. A spec that changes or removes existing behaviour earns the full loop; a purely additive one earns

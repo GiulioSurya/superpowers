@@ -14,24 +14,28 @@ this skill states only what changes when the document is a plan.
 the round-2 message and the stop reasons applies unchanged.
 
 **Core principle:** a plan fails differently from a spec. A spec fails on mechanisms and decisions; a plan fails on
-text that does not compile, tests that cannot pass, and fixtures that do not exist. "Compiles but does not run"
-has been the dominant class in every plan round so far.
+the decisions it hands the implementer — tests that cannot fail or cannot pass, expected values that contradict the
+spec, signatures that disagree between tasks, fixtures that do not exist, spec rules no task owns. A plan written
+the superpowers:writing-plans way carries signatures, tests and commands, not bodies: "compiles but does not run",
+the dominant class while plans carried full code, now lives in the tests and the contracts.
 
 ## The fifth lens
 
 | Lens | Agent | Looks for |
 |---|---|---|
-| Ponytail | `panel-ponytail` | reinvented stdlib, speculative abstractions, duplicated helpers, tests that test the framework |
+| Ponytail | `superpowers:panel-ponytail` | reinvented stdlib, speculative abstractions, duplicated helpers, tests that test the framework |
 
 Its ruleset is the real `ponytail-review` skill, injected into the agent by the `skills:` line of its frontmatter
 — never a paraphrase written by you. Two house rules travel with it: every "reuse X instead" cites the existing
 thing as `repo/file:line`; a lean-up that touches a mechanism the spec mandates is rejected by citing the spec
 section, and the lens says so under "Rejected lean-ups" instead of proposing it.
 
-On a plan the QA lens (`panel-qa`) does more than on a spec: it runs the literal text in a scratch directory —
-parsers, compilers, the tests themselves — reads every test asking "can this fail?", checks that the task order is
-executable red-first, and maps every spec acceptance criterion to a plan task and back. It repeats your §1
-self-check independently; it does not replace it.
+On a plan the QA lens (`superpowers:panel-qa`) does more than on a spec: in a scratch directory it runs what the plan
+carries — parsers and compilers on every block, the tests wherever the plan also carries the code they exercise,
+every expected value recomputed from the spec — reads every test asking "can this fail?", checks that signatures
+agree across tasks and that the task order is executable red-first, maps every spec acceptance criterion to a plan
+task and back, and checks the Review Focus section. It repeats your §1 self-check independently; it does not
+replace it.
 
 All five run on every plan. Ponytail and security have had zero overlap with the other three: each found a class
 of its own.
@@ -42,13 +46,19 @@ What `sed` on every anchor is for a spec, **running the literal text** is for a 
 - Extract every code block and hand it to the compiler or parser it claims to be for: `ast.parse` or `py_compile`
   for Python, `esbuild` or `tsc` for TypeScript, `swiftc -typecheck` for Swift. Count the blocks you extracted
   against the blocks in the file — a block introduced by prose instead of a path escapes a naive regex.
-- Where the Python blocks form a package, run them with `pytest` in a scratch directory. A typecheck does not
-  catch a fixture with wrong arithmetic, an epoch constant a year off, a `now` injected but ignored, or a fake
-  that patches the wrong module; executing the tests does.
+- Where the plan carries the code its tests exercise (a full-code plan, an algorithm step), run them with `pytest`
+  in a scratch directory. A typecheck does not catch a fixture with wrong arithmetic, an epoch constant a year
+  off, a `now` injected but ignored, or a fake that patches the wrong module; executing the tests does. A step
+  that gives only a signature has nothing for its tests to run against yet: a missing body, or a test failing
+  for lack of one, is not a plan defect.
 - Every file marked "new": `ls` it. A plan said "new" of a test file that already existed; four lenses reported it.
 - Every "delete lines a-b": `sed -n` on a-1 through b+1.
 - Every "Expected:" of a DB check: run the check first. One was written against a tenant with zero rows.
-- Every expected number in a test: recompute it yourself before the panel does.
+- Every expected number in a test: recompute it yourself from the rule the spec states — not from the formula a
+  step suggests — before the panel does. On a lean plan nothing else checks it before the implementer.
+- Every signature: the producing task's Interfaces block, each step that calls it and each test that imports it
+  name the same parameters in the same order.
+- Every spec rule: a task and a test own it, or the Review Focus section names it.
 - Every test: read it asking "can this fail?" — cleanup, double render, a mock that returns what the assertion
   checks.
 - The plan's verification commands against the spec's rollout section, verbatim. Plans narrow the final
@@ -69,11 +79,12 @@ The four parts of the spec dispatch, plus three:
 5. **The spec's path and closing revision** — ponytail cites its sections to reject a lean-up, QA checks the
    plan's verification against its rollout, critical hunts silent deviations from it.
 6. **A scratch directory and the permission to execute there**, for the adversarial and QA lenses: write the
-   plan's code blocks to it and run them; nothing is written anywhere else. In the runs that granted it, the
-   lenses with a mandate to execute found every real blocker.
-7. **Parts written at contract level**, if any (another engineer will detail them): say so, and that they are
-   reviewed for consistency with the spec, not for missing literal code. Otherwise the QA lens spends its
-   budget there.
+   plan's code blocks to it and run what can run; nothing is written anywhere else. In the runs that granted it,
+   the lenses with a mandate to execute found every real blocker.
+7. **Code steps written as contracts** — the writing-plans default: signature, file and pinned values, the body
+   left to the implementer. Say so, and that they are reviewed for consistency with the spec and with each other,
+   not for missing bodies; name any step that does carry a literal body. Otherwise the QA lens spends its budget
+   there.
 
 Same text for all five agents, one message, no `model` parameter.
 
@@ -102,8 +113,8 @@ existing token manager); one lean-up introduced a latent throw and was caught by
 
 Same messages, same stop reasons. Plans converge faster than specs — the author arrives calibrated by the spec
 loop — and your human partner may set the cap at one round; name the cap you closed under. Residual MINOR/NIT
-become notes inside the plan's tasks. Then superpowers:subagent-driven-development or
-superpowers:executing-plans.
+become notes inside the plan's tasks. Then superpowers:writing-plans' Execution Handoff: your human partner reviews
+the plan and gives the implementation directions, and execution starts only after that.
 
 Five lenses on a plan's first round cost as much as a spec's first round: in the order of 1.1-1.7M agent tokens
 and 10-17 minutes of wall clock.

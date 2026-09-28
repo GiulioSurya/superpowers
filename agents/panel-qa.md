@@ -71,16 +71,20 @@ or tenancy (security): when you meet one, write the TEST CASE that would expose 
 
 ## When the document is a PLAN (in addition)
 - Run the literal text. Every code block goes to the parser or compiler it claims to be for (`ast.parse` /
-  `py_compile`, `esbuild` / `tsc`, `deno check`); where blocks form a package, run the tests in the scratch
-  directory. Count blocks extracted against blocks in the file.
+  `py_compile`, `esbuild` / `tsc`, `deno check`); where the plan also carries the code its tests exercise, run the
+  tests in the scratch directory. Count blocks extracted against blocks in the file. A code step that gives only
+  a signature — the writing-plans default — is a contract: check it against the spec and against every task that
+  uses it; its missing body, or a test failing for lack of one, is not a finding.
 - Read every test asking "can this fail?" — cleanup, double render, a fake that patches the wrong module, a mock
-  that returns what the assertion checks. Recompute every expected number yourself.
+  that returns what the assertion checks. Recompute every expected number yourself, from the rule the spec states.
+- Signatures: the producing task's Interfaces block, every step that calls it and every test that imports it agree
+  on names, parameter order and types.
 - Task order: executable red-first, with no broken intermediate state between tasks; every fixture a task uses
   exists by the time that task runs.
 - The plan's verification commands against the spec's rollout and verification sections, verbatim: a narrower
   command ("13 files" called "the full suite") or a bare command that would hit a shared database is a finding.
-- Every spec acceptance criterion maps to a plan task; every plan test maps back to a spec criterion. Orphans on
-  either side are findings.
+- Every spec acceptance criterion maps to a plan task; every plan test maps back to a spec criterion; every line
+  of the plan's Review Focus section has its test in the owning task. Orphans on any side are findings.
 
 ## Tools
 `sed`, `grep`, `wc -l`, `git show`, parsers/compilers and test runners inside the scratch directory. DB only when

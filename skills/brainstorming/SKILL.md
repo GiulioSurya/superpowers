@@ -43,10 +43,15 @@ selected path's prerequisites:
 
 - Spike: the human partner approves the question and probe.
 - Bounded: the human partner approves the short in-chat design.
-- Architectural: the human partner reviews and approves the written spec,
-  then reviews the written implementation plan and selects its execution
-  method. Conversational design approval only permits writing the spec;
-  written-spec approval only permits invoking writing-plans.
+- Architectural: the spec review panel converges on the written spec and
+  the human partner approves it; the partner approves the amendments, if
+  any, that pre-implementation-research makes to it; after the plan review
+  panel converges, the partner reviews the written implementation plan and
+  gives the implementation directions. Conversational design approval only
+  permits writing the spec; written-spec approval only permits invoking
+  pre-implementation-research (or writing-plans, when the spec meets its
+  bypass criteria); approval of the amendments only permits invoking
+  writing-plans.
 
 A reply approves the stage actually presented. Approval of an idea or
 feature scope does not approve artifacts that do not exist yet. Resume
@@ -81,7 +86,8 @@ override it:
 - **Architectural** — new projects, new subsystems, changes that
   restructure how components fit together or alter interfaces others
   depend on. Follow the full process: questions, approaches, sectioned
-  design, written spec, then pre-implementation-research (default) or
+  design, written spec, the spec review panel, then
+  pre-implementation-research (default) or
   the writing-plans skill (only when the spec meets
   pre-implementation-research's "Don't use when" criteria).
 
@@ -138,8 +144,9 @@ your path and complete them in order.
 5. **Present design** — in sections scaled to their complexity, get user approval after each section
 6. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
 7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-8. **User reviews written spec** — ask user to review the spec file before proceeding
-9. **Transition to implementation** — by default invoke `superpowers:pre-implementation-research`. Bypass it and invoke `superpowers:writing-plans` directly ONLY when the spec meets one of the criteria listed in pre-implementation-research's "Don't use when" section (all tech grep-verifiable in the current codebase, no external SDK/API, or the spec is itself a research document).
+8. **Spec review panel** — invoke `superpowers:requesting-spec-review`; the loop runs to a named stop reason without checking in with your human partner between rounds (see below)
+9. **User reviews written spec** — ask user to review the spec file before proceeding
+10. **Transition to implementation** — by default invoke `superpowers:pre-implementation-research`; when it amends the spec, your human partner approves the amendments before writing-plans. Bypass it and invoke `superpowers:writing-plans` directly ONLY when the spec meets one of the criteria listed in pre-implementation-research's "Don't use when" section (all tech grep-verifiable in the current codebase, no external SDK/API, or the spec is itself a research document).
 
 ## Process Flow
 
@@ -161,6 +168,7 @@ digraph brainstorming {
     "User approves design?" [shape=diamond];
     "Write design doc" [shape=box];
     "Spec self-review\n(fix inline)" [shape=box];
+    "Spec review panel\n(requesting-spec-review)" [shape=box];
     "User reviews spec?" [shape=diamond];
     "Spec uses external SDK/API\nnot grep-verifiable in codebase?" [shape=diamond];
     "Invoke pre-implementation-research" [shape=doublecircle];
@@ -186,7 +194,8 @@ digraph brainstorming {
     "User approves design?" -> "Present design sections" [label="no, revise"];
     "User approves design?" -> "Write design doc" [label="yes"];
     "Write design doc" -> "Spec self-review\n(fix inline)";
-    "Spec self-review\n(fix inline)" -> "User reviews spec?";
+    "Spec self-review\n(fix inline)" -> "Spec review panel\n(requesting-spec-review)";
+    "Spec review panel\n(requesting-spec-review)" -> "User reviews spec?";
     "User reviews spec?" -> "Write design doc" [label="changes requested"];
     "User reviews spec?" -> "Spec uses external SDK/API\nnot grep-verifiable in codebase?" [label="approved"];
     "Spec uses external SDK/API\nnot grep-verifiable in codebase?" -> "Invoke pre-implementation-research" [label="yes (default)"];
@@ -271,6 +280,9 @@ After writing the spec document, look at it with fresh eyes:
 
 Fix any issues inline. No need to re-review — just fix and move on.
 
+**Spec Review Panel:**
+After the self-review, invoke `superpowers:requesting-spec-review`. Its lenses read the spec against the real code; the loop folds what they find and ends on a named stop reason. It does not check in with your human partner between rounds — the skill names the only cases that reach them mid-loop.
+
 **User Review Gate:**
 After the spec review loop passes, ask the user to review the written spec before proceeding:
 
@@ -280,7 +292,7 @@ Wait for the user's response. If they request changes, make them and re-run the 
 
 **Implementation:**
 
-- **Default:** invoke `superpowers:pre-implementation-research`. It produces a research artifact under `docs/superpowers/research/` and then hands off to `writing-plans` itself.
+- **Default:** invoke `superpowers:pre-implementation-research`. It produces a research artifact under `docs/superpowers/research/`, shows your human partner the amendments it made to the spec, if any, and hands off to `writing-plans` itself once they approve them.
 - **Bypass — invoke `superpowers:writing-plans` directly only if the spec meets one of the criteria in pre-implementation-research's "Don't use when" section:**
   - all tech in the spec is already used in the current codebase and is grep-verifiable (`<file>:<line>`),
   - no external SDK / library / API is involved (pure internal refactor),

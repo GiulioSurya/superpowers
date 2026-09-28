@@ -176,26 +176,31 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
 
+## Plan Review Panel
+
+After the self-review, invoke `superpowers:requesting-plan-review`. Its lenses read the plan against the spec and the real code; the loop folds what they find and ends on a named stop reason, without checking in with your human partner between rounds. The Execution Handoff starts once it stops.
+
 ## Execution Handoff
 
-After saving and self-reviewing the plan, link it for your human partner
-to read. If they have already explicitly supplied an execution method, ask
-them to review the plan and confirm it captures what they want; wait for that
-review before implementation, then use the preserved method. Otherwise, ask
-them to review the plan and choose an execution method before implementation.
+After the plan review panel stops, link the plan for your human partner to
+read, with the panel's stop reason. Ask them to review it and to give the
+implementation directions: the execution method, the worktree, where the
+reviews go, and which models run. If they have already explicitly supplied
+some of these, preserve them and ask only for the rest. Wait for their review
+and their directions before implementation.
 
 **When no execution method has already been supplied:**
 
-**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Please review the plan. Which execution approach would you prefer?**
+**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`; the review panel closed with <stop reason>. Please review the plan, then tell me how to run it: which execution approach, which worktree, where the reviews go, and which models.**
 
 - **Subagent-driven** - A fresh subagent implements each task and a fresh reviewer checks it before the next one starts, then a whole-branch review at the end. Most thorough; costs a fresh context per task and per review.
 - **Native** - I implement every task myself in this session, the way this harness runs work, then one fresh reviewer on the most capable model checks the whole branch. Cheapest and fastest; no independent review until the end. Runs well with a mid-tier session model, since the plan carries the design.
 
-**For this plan I recommend <one of the two>, because <one sentence from the plan: how much the tasks depend on each other's interfaces, how many there are, what a shipped mistake would cost>. Does the plan capture what you want, and which approach should we use?"**
+**For this plan I recommend <one of the two>, because <one sentence from the plan: how much the tasks depend on each other's interfaces, how many there are, what a shipped mistake would cost>. Does the plan capture what you want, and how should we run it?"**
 
 **When an execution method has already been supplied:**
 
-**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Please review the plan. Does it capture what you want?"**
+**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`; the review panel closed with <stop reason>. Please review the plan. Does it capture what you want?"** — and ask for whichever of the worktree, the review points and the models they have not given yet.
 
 **If Subagent-driven chosen:**
 - **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
