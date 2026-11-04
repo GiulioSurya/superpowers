@@ -145,8 +145,9 @@ mid-loop interrupts it without adding information.
 | `STOP-CONFLICT` | two lenses contradict each other on the same finding for two rounds | the only mid-loop question to your human partner |
 
 State the reason and the round numbers in your reply. Then the spec goes to your human partner for review
-(`superpowers:brainstorming`'s User Review Gate); after their approval, `superpowers:pre-implementation-research` —
-or `superpowers:writing-plans` when the spec meets its bypass criteria.
+(`superpowers:brainstorming`'s User Review Gate); after their approval, `superpowers:writing-plans`, with the research
+artifact's path when there is one. `superpowers:pre-implementation-research` has already run before this panel and
+folded its amendments into the spec the lenses read.
 
 Round 1 finds structural errors; round 2 finds the regressions your consolidation introduced; round 3 returns
 anchoring nits. A spec that changes or removes existing behaviour earns the full loop; a purely additive one earns
