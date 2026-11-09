@@ -234,7 +234,7 @@ and fix-round diffs need it.
   fix-loop rounds 1-3 resume this agent.
 - Never dispatch multiple implementation subagents in parallel (conflicts).
 
-**Dispatch Context — Research Artifact.** The implementer runs in a fresh context and cannot find the research artifact unless you give it. Fill the implementer prompt's `## Research artifact` slot (see [implementer-prompt.md](implementer-prompt.md)) in every dispatch: the artifact's path (`docs/superpowers/research/<spec-name>.md`) and the `Mock contract` subsections for every external dependency the task will mock — or, when no artifact exists for this work (rare in this skill's flow: the plan should have come from `writing-plans` after `pre-implementation-research`), say so, and the implementer tests against the real dependency or escalates as `NEEDS_CONTEXT` so you can run `pre-implementation-research` ad-hoc. The mock rule itself is superpowers:test-driven-development's research-artifact rule; an empty slot is the bluff it closes — a fresh implementer with no contract invents the mock's shape from memory.
+**Research artifact:** if this work has one, read [references/research-artifact.md](references/research-artifact.md) before the first dispatch.
 
 Template: [implementer-prompt.md](implementer-prompt.md)
 
@@ -280,15 +280,6 @@ needed.
   Y"). The reviewer's template already carries the process rules (YAGNI,
   test hygiene, review method) — the constraints block is for what THIS
   project's spec demands.
-- **Only when a research artifact exists** for this work
-  (`docs/superpowers/research/<spec>.md`), add one binding line to that
-  constraints block: every mock of an external dependency must carry a
-  `mock-source:` comment citing its `Mock contract` in the artifact — an
-  uncited mock is bluffed. The orchestrator already passes the artifact
-  into the implementer dispatch (see *Dispatch Context — Research
-  Artifact*); this line makes the reviewer the catch-net. **If no
-  artifact exists, skip this** — an SDD run with no research artifact has
-  no Mock contract, and the rule does not apply.
 - Do not add open-ended directives like "check all uses" or "run race tests
   if useful" without a concrete, task-specific reason
 - Do not ask a reviewer to re-run tests the implementer already ran on the
