@@ -231,8 +231,41 @@ Next failing test for next feature.
 | **Shows intent** | Demonstrates desired API | Obscures what code should do |
 | **Earns its cost** | Catches a break no other test catches; runs in milliseconds | Re-checks a constant, a mock call, a library feature, or a case another test covers |
 
-When writing or changing any test, read [writing-good-tests.md](writing-good-tests.md) for the rules that keep tests honest:
-- What gets a test and what doesn't — the "not worth a test" table
+## What Gets a Test
+
+**Write a test for:**
+- A behavior someone depends on, seen at the public interface: a return
+  value, a state change, a row written, a response, an error or refusal
+- A rule your code enforces: validation, computed default, permission or
+  tenant check, limit
+- A boundary your code branches on (empty, zero, cap, cap+1, missing row,
+  wrong owner) — not values that take an already-tested branch
+- A fixed bug: its reproduction on the user's path
+- A contract between two parts that can drift, reading both sides
+- A property slow machinery exists to provide (child process, converter,
+  browser, timeout): one real test per property, every other case fast
+
+**Don't write (delete them from test files you touch, and say so):**
+- Text presence: a prompt, message, doc or label "contains" a phrase
+- An expected value copied from a constant, config or list in the code
+- A language, framework or library feature (frozen, required field, enum)
+- Import smoke, tests of your own fakes, "does not raise" with no
+  decision behind it
+- Mock-call assertions on internal collaboration (called-with, order,
+  fan-out, `close()` called) — assert the end state on a fake instead
+- Reading the source to pin names, counts or order — that is a linter rule
+- The same case twice, at two levels or in bodies that differ only in
+  literals (one parametrized test)
+- A live external service answering; a test that needs your machine's
+  environment, paths or network; real sleeps
+
+**Never cut:** a bug's regression test; a security, permission or
+tenant-isolation test (even when its proof uses text); a contract test
+reading both sides; byte-for-byte equality of two outputs; a mock-call on
+an external effect with no other observable; text that is itself the
+consumed artifact (Dockerfile, CI workflow, deploy definition).
+
+When writing or changing any test, read [writing-good-tests.md](writing-good-tests.md) for the reasons, the alternatives and the rules that keep tests honest:
 - Name the production change that would make the test fail — before writing it
 - Assert on real behavior, never on mock behavior
 - Keep test-only code in test utilities, out of production classes
