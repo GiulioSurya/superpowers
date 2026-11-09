@@ -69,7 +69,9 @@ or tenancy (security): when you meet one, write the TEST CASE that would expose 
   copied from a constant or config, a framework or library feature, a mock-call assertion on internal
   collaboration, reading the source, "does not raise", the same case at two levels or in several bodies) — and
   every test that pays a real wait, child process, converter or browser per case where one real test per
-  property would do. Each is a finding (MINOR) naming what to cut, merge or make fast.
+  property would do. Each is a finding (MINOR) naming what to cut, merge or make fast. Never on this list: a
+  bug's regression test, a security or tenant-isolation test, a contract test reading both sides, the "Never cut"
+  cases of writing-good-tests.md.
 - Testability: can each mechanism be observed and driven from a test? Injectable clock/ids, a seam where the fake
   goes, what must NOT be mocked because the mock would return what the assertion checks.
 - Fixtures and data: what rows, tenants, users, flags and environments the verification needs; whether they exist

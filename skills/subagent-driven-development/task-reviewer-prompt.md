@@ -129,6 +129,10 @@ Subagent (general-purpose):
       smoke, a test of a fake, a mock-call assertion on internal
       collaboration, reading the source, "does not raise", the same case
       twice.
+      Never cut: a bug's regression test, a security or tenant-isolation
+      test, a contract test reading both sides, byte equality of two
+      outputs, a mock-call on an external effect with no other observable,
+      text that is the consumed artifact (Dockerfile, CI, deploy file).
     - Does a new test sleep, or take over a second without a comment naming
       the property only it proves?
 
@@ -158,7 +162,8 @@ Subagent (general-purpose):
     would block a merge over — verbatim duplication of a logic block,
     swallowed errors, tests that assert nothing, a new test that catches no
     break (the fix is deleting it: every such test is paid for on every
-    future change). "Coverage could be broader", a slow test, and polish
+    future change; at the plan stage the QA lens grades the same test
+    MINOR, because cutting a line from a plan costs nothing yet). "Coverage could be broader", a slow test, and polish
     suggestions are Minor.
     If the plan or brief explicitly mandates something this rubric calls a
     defect (a test that asserts nothing, verbatim duplication of a logic

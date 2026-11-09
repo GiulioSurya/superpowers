@@ -61,12 +61,24 @@ has them, delete them and list them in your report:
 | The text of a one-shot migration that has already run everywhere | Pins history | Test the resulting schema or behavior against a database, or delete it once applied |
 | Needs a local environment variable, an absolute path, a file outside the repo, or the network | Protects one machine | A hermetic fixture; a skip only with a stated reason |
 
-Two exceptions stay: a mock-call assertion is right for an external effect
-that is otherwise unobservable (a message sent, an RPC whose name is the
-contract); a text assertion is right when the text is the artifact others
-consume and it has no runtime to exercise (a Dockerfile, a CI workflow, a
-deploy definition). Byte-for-byte equality of two outputs (cache
-stability) is a behavior, not a text test.
+**Never cut, even when they look like a row above** — they are the tests
+the table exists to protect:
+
+- the regression test of a fixed bug, named after the bug;
+- a security, permission or tenant-isolation test, even when its proof
+  uses text (another tenant's data must not appear in the output);
+- a contract test that reads both sides of the contract;
+- byte-for-byte equality of two outputs (cache stability) — a behavior,
+  not a text test;
+- a mock-call assertion on an external effect that is otherwise
+  unobservable (a message sent, an RPC whose name is the contract);
+- a text check on an artifact with no runtime to exercise, whose text is
+  what others consume (a Dockerfile, a CI workflow, a deploy definition),
+  or a repo-wide guard for a security invariant no runtime test reaches
+  (every view declares the security option, no secret in a deploy file).
+
+"Another test already covers it" is a claim to check by reading that
+test, never by its name.
 
 ## Principle 1: Name the Break
 
@@ -113,14 +125,17 @@ BEFORE writing the test body:
   "The source text changed"  → run the artifact and assert its effects
   Only intentional decisions → change detector; test the behavior
                                that depends on the decision
-  Already caught elsewhere   → no test; the other one covers it
+  Already caught elsewhere   → no test, once you have read the test
+                               that catches it (never for a bug's
+                               regression test)
 
   Confirm the expected value is derived without the code under test.
 ```
 
 ## Principle 2: Exercise the Real Thing
 
-**The mock earns no assertions.** A mock assertion passes when the mock
+**The mock earns no assertions** — except an external effect with no
+other observable (see "Never cut"). A mock assertion passes when the mock
 is present and fails when it is absent — it says nothing about the
 component. Assert the real component's behavior; if the mock is what you
 are checking, unmock it or delete the assertion.
@@ -226,7 +241,7 @@ no realistic mutation can fail is not protecting anything: delete it.
 | Have several cases of one behavior | One parametrized test |
 | Need a child process, converter, browser or wait | One real test per property; the rest fast |
 | Touch a test file with not-worth tests | Delete them and list them in your report |
-| Finish a test file | Run the mutation check |
+| Finish a test file | Run the mutation check, mentally |
 
 ## Warning Signs
 

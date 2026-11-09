@@ -149,6 +149,10 @@ Subagent (general-purpose):
       smoke, a test of a fake, a mock-call assertion on internal
       collaboration, reading the source, "does not raise", the same case
       twice.
+      Never cut: a bug's regression test, a security or tenant-isolation
+      test, a contract test reading both sides, byte equality of two
+      outputs, a mock-call on an external effect with no other observable,
+      text that is the consumed artifact (Dockerfile, CI, deploy file).
     - Does any test sleep, or take over a second without a comment naming
       the property only it proves?
     - Is the test output pristine (no stray warnings or noise)?

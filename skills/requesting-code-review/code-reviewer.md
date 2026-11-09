@@ -86,7 +86,8 @@ Subagent (general-purpose):
     - Integration tests where they matter, one per seam?
     - Tests that catch nothing — pinned wording or constants, framework
       features, mock-call assertions, source reading, duplicates? Name them
-      for deletion.
+      for deletion — never a bug's regression test, a security or
+      tenant-isolation test, or a contract test reading both sides.
     - Slow tests (sleeps, real waits, a converter or browser per case)?
     - All tests passing?
 

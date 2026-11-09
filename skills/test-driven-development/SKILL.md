@@ -187,7 +187,8 @@ npm test path/to/test.test.ts
 
 Confirm:
 - Test passes
-- Other tests still pass
+- The tests for the code you touched still pass (the whole suite runs
+  once, at the end — below)
 - Output pristine (no errors, warnings)
 
 **Test fails?** Fix code, not test.
