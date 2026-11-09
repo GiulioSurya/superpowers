@@ -84,7 +84,8 @@ document: it says what the software must do, not everything it will
 meet, and its silence on an input is not permission for that input to
 break the program. Write the list here, once, with the spec in front of
 you. Then, for each line, add the test that pins it to the task that
-owns the code, in that task's own step style.]
+owns the code, in that task's own step style — unless a test the plan
+already has catches it.]
 
 ---
 ```
@@ -144,7 +145,11 @@ from it. That is the whole requirement: unambiguous, not complete. Each kind
 of step carries what makes it unambiguous and nothing more:
 
 - **A test step:** the test's name and its assertions, as code, with the
-  spec's exact values in them.
+  spec's exact values in them. One test per behavior the task adds, at the
+  lowest level that sees it; nothing from the "not worth a test" list of
+  superpowers:test-driven-development's writing-good-tests.md (pinned
+  wording or constants, framework features, mock-call assertions, source
+  reading, the same case twice).
 - **A code step:** the exact signature (name, parameters, return type), the
   file it lives in, and the specific values the spec pins. The implementer
   writes the body. A body appears only for an algorithm the signature and

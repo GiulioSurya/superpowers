@@ -122,7 +122,15 @@ Subagent (general-purpose):
 
     **Tests:**
     - Do the new and changed tests verify real behavior, not mocks?
-    - Are the task's edge cases covered?
+    - Are the boundaries and errors this code branches on covered?
+    - Which new tests could be deleted without losing a break they catch?
+      Name each: text presence in a prompt/message/doc, a value copied from a
+      constant or config, a language/framework/library feature, an import
+      smoke, a test of a fake, a mock-call assertion on internal
+      collaboration, reading the source, "does not raise", the same case
+      twice.
+    - Does a new test sleep, or take over a second without a comment naming
+      the property only it proves?
 
     **Structure:**
     - Does each file have one clear responsibility with a well-defined interface?
@@ -148,8 +156,10 @@ Subagent (general-purpose):
     Important means this task cannot be trusted until it is fixed: incorrect
     or fragile behavior, a missed requirement, or maintainability damage you
     would block a merge over — verbatim duplication of a logic block,
-    swallowed errors, tests that assert nothing. "Coverage could be broader"
-    and polish suggestions are Minor.
+    swallowed errors, tests that assert nothing, a new test that catches no
+    break (the fix is deleting it: every such test is paid for on every
+    future change). "Coverage could be broader", a slow test, and polish
+    suggestions are Minor.
     If the plan or brief explicitly mandates something this rubric calls a
     defect (a test that asserts nothing, verbatim duplication of a logic
     block), that IS a finding — report it as Important, labeled

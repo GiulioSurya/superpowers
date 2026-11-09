@@ -60,7 +60,8 @@ What `sed` on every anchor is for a spec, **running the literal text** is for a 
   name the same parameters in the same order.
 - Every spec rule: a task and a test own it, or the Review Focus section names it.
 - Every test: read it asking "can this fail?" — cleanup, double render, a mock that returns what the assertion
-  checks.
+  checks — and "does it catch a break no other test catches?" A test on writing-good-tests' "not worth a test" list
+  is cut from the plan.
 - The plan's verification commands against the spec's rollout section, verbatim. Plans narrow the final
   verification ("13 files" called "the full suite"), and a bare `npm run test` may launch integration projects
   against a shared database.

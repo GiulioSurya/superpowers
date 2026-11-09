@@ -82,8 +82,12 @@ Subagent (general-purpose):
 
     **Testing:**
     - Tests verify real behavior, not mocks?
-    - Edge cases covered?
-    - Integration tests where they matter?
+    - The boundaries and errors the code branches on covered?
+    - Integration tests where they matter, one per seam?
+    - Tests that catch nothing — pinned wording or constants, framework
+      features, mock-call assertions, source reading, duplicates? Name them
+      for deletion.
+    - Slow tests (sleeps, real waits, a converter or browser per case)?
     - All tests passing?
 
     **Production readiness:**
@@ -164,7 +168,7 @@ Subagent (general-purpose):
 ```
 ### Strengths
 - Clean database schema with proper migrations (db.ts:15-42)
-- Comprehensive test coverage (18 tests, all edge cases)
+- Each behavior pinned once at the lowest level, including the empty and over-limit inputs (summarizer.test.ts:12-58)
 - Good error handling with fallbacks (summarizer.ts:85-92)
 
 ### Issues

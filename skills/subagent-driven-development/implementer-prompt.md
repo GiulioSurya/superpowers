@@ -71,7 +71,13 @@ Subagent (general-purpose):
     It's always OK to pause and clarify. Don't guess or make assumptions.
 
     While iterating, run the focused test for what you're changing; run the
-    full suite once before committing, not after every edit.
+    full suite once before committing, not after every edit, with the
+    project's parallel command when its CLAUDE.md or README names one.
+
+    Write one test per new behavior, at the lowest level that sees it — not
+    one per function. Don't write tests that catch no break another test
+    doesn't already catch (superpowers:test-driven-development,
+    writing-good-tests.md, "What Gets a Test").
 
     ## You Do Not Dispatch Subagents
 
@@ -137,7 +143,14 @@ Subagent (general-purpose):
     **Testing:**
     - Do tests actually verify behavior (not just mock behavior)?
     - Did I follow TDD if required?
-    - Are tests comprehensive?
+    - Does each new behavior have one test, at the lowest level that sees it?
+    - Did I write a test that catches nothing? Delete it: text presence in a prompt/message/doc, a value copied from a
+      constant or config, a language/framework/library feature, an import
+      smoke, a test of a fake, a mock-call assertion on internal
+      collaboration, reading the source, "does not raise", the same case
+      twice.
+    - Does any test sleep, or take over a second without a comment naming
+      the property only it proves?
     - Is the test output pristine (no stray warnings or noise)?
     - With a research artifact: does every mock follow its Mock contract and
       carry the `mock-source:` comment?
