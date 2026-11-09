@@ -145,7 +145,7 @@ mid-loop interrupts it without adding information.
 | `STOP-CONFLICT` | two lenses contradict each other on the same finding for two rounds | the only mid-loop question to your human partner |
 
 State the reason and the round numbers in your reply. Then the spec goes to your human partner for review
-(`superpowers:brainstorming`'s User Review Gate); after their approval, `superpowers:writing-plans`, with the research
+(`superpowers:brainstorming` asks for their approval of the design doc); after their approval, `superpowers:writing-plans`, with the research
 artifact's path when there is one. `superpowers:pre-implementation-research` has already run before this panel and
 folded its amendments into the spec the lenses read.
 

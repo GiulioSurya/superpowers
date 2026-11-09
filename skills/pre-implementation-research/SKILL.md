@@ -7,20 +7,20 @@ description: Use when specs/design are approved, before writing the implementati
 
 ## Overview
 
-Runs on a self-reviewed spec before `superpowers:requesting-spec-review`, so the review panel and your human partner read a spec that research has already verified, and `superpowers:writing-plans` starts from it. Forces explicit verification of every SDK/library/API surface the plan will touch, **delegated to subagents** to keep coordinator context clean. Output is a persistent markdown artifact passed to downstream subagents.
+Runs on the design doc `superpowers:brainstorming` writes (the spec; for a project, after its builder check) before `superpowers:requesting-spec-review`, so the review panel and your human partner read a spec that research has already verified, and `superpowers:writing-plans` starts from it. Forces explicit verification of every SDK/library/API surface the plan will touch, **delegated to subagents** to keep coordinator context clean. Output is a persistent markdown artifact passed to downstream subagents.
 
 **Core principle:** Agents bluff what they don't know. The discipline is making unknowns explicit and verifying them against authoritative sources before the plan commits to them.
 
 ## When to Use
 
-**Trigger:** Spec exists in `docs/superpowers/specs/` and has passed its self-review, `superpowers:requesting-spec-review` is next, and the implementation will use SDK/library/API code not recently verified.
+**Trigger:** A design doc (short or full) exists in `docs/superpowers/specs/`, its approval by your human partner is next (for a project, after `superpowers:requesting-spec-review`), and the implementation will use SDK/library/API code not recently verified.
 
 **Don't use when:**
 - All tech in spec is already used in the current codebase (grep-verifiable)
 - No external SDK/API involvement (pure internal refactor)
 - The spec itself is a research document
 
-**Ad-hoc mode (no spec).** When invoked from `superpowers:brainstorming`'s bounded path (external-surface check) or from `subagent-driven-development`'s NEEDS_CONTEXT escalation, no spec file exists. The tech inventory comes from the approved in-chat design (or the dispatch context), scoped to the new tech only. Everything else holds unchanged: user-approved inventory gate, tier classification, subagent dispatch, artifact at `docs/superpowers/research/<topic>.md` with Mock contracts. Steps that patch the spec and review the patch (steps 7-8) don't apply — a finding that contradicts the approved design goes back to your human partner in chat before implementation.
+**Ad-hoc mode (no spec).** When invoked from `superpowers:brainstorming` after your human partner opted out of the questions (no design doc) or from `subagent-driven-development`'s NEEDS_CONTEXT escalation, no spec file exists. The tech inventory comes from the request as agreed in chat (or the dispatch context), scoped to the new tech only. Everything else holds unchanged: user-approved inventory gate, tier classification, subagent dispatch, artifact at `docs/superpowers/research/<topic>.md` with Mock contracts. Steps that patch the spec and review the patch (steps 7-8) don't apply — a finding that contradicts the approved design goes back to your human partner in chat before implementation.
 
 ## The Iron Law
 
@@ -58,9 +58,9 @@ NO SUBAGENT DISPATCH WITHOUT USER-APPROVED TECH INVENTORY
 
 7. **Apply spec amendments** (if any). Research findings often contradict assumptions baked into the spec. If the artifact's `## Required spec amendments` section is non-empty, patch the spec file NOW — before the spec review panel. A Mock contract in the artifact always brings one amendment: the mock constraint line. See "Spec Amendments After Research" section below.
 
-8. **Report the amendments.** If step 7 changed the spec, list them for your human partner in one short message (what changed and why), then go on: no separate approval is asked here, because the spec review panel reads the amended spec and your human partner approves all of it at the User Review Gate. No amendments: say so in one line.
+8. **Report the amendments.** If step 7 changed the spec, list them for your human partner in one short message (what changed and why), then go on: no separate approval is asked here, because the spec review panel reads the amended spec and your human partner approves all of it when brainstorming hands them the doc. No amendments: say so in one line.
 
-9. **Hand off** — invoke `superpowers:requesting-spec-review` on the amended spec, with the artifact path in its dispatch; after the panel and your human partner's approval, `superpowers:writing-plans` receives the same path. The spec at this point already reflects research findings; `writing-plans` reads only the spec.
+9. **Hand off** — for a project, invoke `superpowers:requesting-spec-review` on the amended spec, with the artifact path in its dispatch; a small change goes straight to your human partner. After their approval, `superpowers:writing-plans` receives the same path. The spec at this point already reflects research findings; `writing-plans` reads only the spec.
 
 ## Tier Classification
 
@@ -196,8 +196,8 @@ If a T2 spike fails (auth missing, runtime error, env not available):
 
 ## Integration
 
-- **Precedes:** `superpowers:requesting-spec-review`, which reviews the spec patched in step 7, then `superpowers:writing-plans`, which reads the **spec** (approved by your human partner after the panel), not this artifact directly
-- **Follows:** the spec's self-review (`superpowers:brainstorming`, right after the spec is written)
+- **Precedes:** `superpowers:requesting-spec-review` (a project only), which reviews the spec patched in step 7, then `superpowers:writing-plans`, which reads the **spec** (approved by your human partner after the panel), not this artifact directly
+- **Follows:** the design doc (`superpowers:brainstorming`, right after it is written; for a project, after the builder check)
 - **Consumed by:** `superpowers:executing-plans` and `superpowers:subagent-driven-development` — the verified findings reach implementers through spec → plan → task brief (as Global Constraints and Interfaces), while the **Mock contract** is read directly from this artifact by whoever writes a mock (`superpowers:test-driven-development`'s research-artifact rule; `subagent-driven-development` passes the artifact path into each implementer dispatch)
 
 ## Templates
