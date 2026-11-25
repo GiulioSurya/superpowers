@@ -47,7 +47,7 @@ independently testable deliverable.
 - "Run it to make sure it fails" - step
 - "Implement the minimal code to make the test pass" - step
 - "Run the tests and make sure they pass" - step
-- "Commit" - step
+- "Commit" - step, its message ending with a `Plan:` line that names this plan's file
 
 ## Plan Document Header
 
@@ -149,7 +149,7 @@ Expected: PASS
 
 ```bash
 git add tests/path/test.py src/path/file.py
-git commit -m "feat: add specific feature"
+git commit -m "feat: add specific feature" -m "Plan: docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md"
 ```
 ````
 
