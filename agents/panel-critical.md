@@ -52,6 +52,10 @@ path and consumed on another is the defect this question catches and no checklis
   the files the document extends; the extraction it should mandate. Extension axes named in the dispatch, if any:
   what must change, does it stay out of core?
 - Missing decisions the implementer would be forced to take alone.
+- Approved criteria (a rule the human partner approved that sorts a set into treatments): every row of its table
+  against the test — does the fact the row names place the member there? Members of the set the table lacks (sweep
+  the code by shape); members the test does not decide. Report a defect of the criterion's own text as a finding for
+  the human partner, never as a rewording.
 
 ## Tools
 `sed`, `grep`, `wc -l`, `git show`, `uv run python -c` for SDK introspection. No DB.

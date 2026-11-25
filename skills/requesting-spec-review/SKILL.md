@@ -102,6 +102,8 @@ dispatch buys nothing and starts a second source of truth that drifts from the f
 5. **Fold deletions and requested fixes. Nothing else.** Every spontaneous addition made during a consolidation
    has produced a finding in the next round. For each fix, first ask what already exists that does this; if the
    fix adds a mechanism, run the §1 self-check on it before writing it — round 2 exists to catch exactly these.
+   A finding against the text of a criterion your human partner approved is never folded: it waits for them with
+   the spec, as their decision.
 6. **Re-read the whole revision yourself.** Each lens sees its slice; the defect introduced by your own
    consolidation is visible only to you.
 7. **`git status --short`** in every repo the lenses touched. Their tools deny edits; the check is one call.

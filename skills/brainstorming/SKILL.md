@@ -171,6 +171,11 @@ message and explain why the others don't fit; the design comes in the
 next one. This is for how it gets built; for what they want, get them
 describing first.
 
+**A rule that sorts a set.** When the design gives different treatments
+to the members of a set, the treatments come from one criterion your
+human partner approves. Read `criterion.md` in this directory before the
+message that proposes them.
+
 **Show, don't tell.** Whenever seeing would help more than reading,
 sketch it in text: a few lines of what they'd see. Offer the visual
 companion (below) when the look itself is theirs to decide:
@@ -241,6 +246,8 @@ from without going back to your human partner. Cover:
 - constraints
 - approaches (above)
 - the parts of the how they decided, as they decided them
+- each criterion they approved, verbatim, with the table that applies it
+  to every member of its set
 - what's left to the builder
 
 For a small change, the short design covers the same points in a line
@@ -335,6 +342,7 @@ there is one, and no other skill.
 | "The spike works, I'll keep building on it" | Keeping it is a new request. Back through the gate. |
 | "It's a small change, I'll just check the SDK docs myself before coding" | An in-session doc skim leaves no artifact and no Mock contract for the tests to cite. Run pre-implementation research on the short doc: scaled down, never skipped. |
 | "The research amended the doc, straight to approval" | For a project the spec review panel reads the amended doc first; one review covers what research changed. |
+| "I'll propose a treatment for each item on their list" | Their list is not the set. Write the criterion first (`criterion.md`). |
 
 ## Visual Companion
 
