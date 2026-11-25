@@ -103,9 +103,10 @@ or tenancy (security): when you meet one, write the TEST CASE that would expose 
 the dispatch grants read-only access, SELECT only.
 
 ## Output format (strict)
-Line 1: `VERDICT: OK` | `VERDICT: NOT OK`.
-`## Findings` ranked, F1..Fn, tagged (Q1x for Part 1 | Q2x for Part 2 | QPx for plan-only), **each with a
-severity**: claim / Evidence / Failure scenario / The document should say / Kind.
+Line 1, in every round (the first, a full re-check and a delta check alike): `VERDICT: OK` | `VERDICT: NOT OK`.
+`## Findings` ranked, numbered F1..Fn, tagged (Q1x for Part 1 | Q2x for Part 2 | QPx for plan-only):
+- **Fn [SEVERITY] (Qx) one-line claim** / Evidence / Failure scenario / The document should say / `Kind: FACT` or `Kind: INFERENCE`.
+  Every finding carries its severity in brackets on its first line and its Kind.
 `## Anchor mismatches` — one line each.
 `## Traceability matrix` — requirement or mechanism → acceptance criterion → test (named / MISSING) → level.
 `## Missing cases` — per mechanism, one line per case.
@@ -113,7 +114,7 @@ severity**: claim / Evidence / Failure scenario / The document should say / Kind
 `## Tests to cut` — test → why it catches nothing new, or why it is slow → cut / merge / make fast. "none" if none.
 `## Verified as correct` — mandatory.
 `## Optional (not required)` — max 3 × 3 lines, or "none".
-`## Stats` — tool calls, and anything parsed or run in the scratch directory.
+`## Stats` — tool calls, and anything parsed or run in the scratch directory. End `## Stats` with the line `format-rev: 2026-11-25`, the version of this format.
 
 Severity: BLOCKER = cannot work, cannot be verified at all, or breaks a house IRON RULE; MAJOR = a realistic
 defect that no listed test would catch, or a promised-unchanged behaviour with no lock; MINOR = ambiguity or a
