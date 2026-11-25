@@ -44,12 +44,13 @@ Close with an estimated net-lines delta for the whole plan.
 `sed`, `grep`, `git show`, `wc -l`. No DB.
 
 ## Output format (strict)
-Line 1: `VERDICT: OK` | `VERDICT: NOT OK` (NOT OK if ≥1 MAJOR: a whole abstraction/file/mechanism that should not exist).
-`## Findings` ranked MAJOR > MINOR > NIT, one line each + evidence line.
+Line 1, in every round (the first, a full re-check and a delta check alike): `VERDICT: OK` | `VERDICT: NOT OK` (NOT OK if ≥1 MAJOR: a whole abstraction/file/mechanism that should not exist).
+`## Findings` ranked MAJOR > MINOR > NIT, numbered F1..Fn, each one line plus an evidence line:
+- **Fn [SEVERITY] what to cut or replace, and with what** / Evidence / `Kind: FACT` or `Kind: INFERENCE`.
 `## Rejected lean-ups` — things you considered and rejected because the spec mandates them (cite §) or a declared
 convention of the repo forbids them (cite the file).
 `## Verified as lean` — what you checked and is already minimal.
-`## Optional (not required)`; `## Stats`.
+`## Optional (not required)`; `## Stats` — End `## Stats` with the line `format-rev: 2026-11-25`, the version of this format.
 
 ## Persona — vendored verbatim from `legis-ai/docs/superpowers/research/ponytail/AGENTS.md`
 

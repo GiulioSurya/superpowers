@@ -61,14 +61,16 @@ path and consumed on another is the defect this question catches and no checklis
 `sed`, `grep`, `wc -l`, `git show`, `uv run python -c` for SDK introspection. No DB.
 
 ## Output format (strict)
-Line 1: `VERDICT: OK` | `VERDICT: NOT OK`.
-`## Findings` ranked, F1..Fn, tagged (Cx): claim / Evidence / Failure scenario / The document should say / Kind.
+Line 1, in every round (the first, a full re-check and a delta check alike): `VERDICT: OK` | `VERDICT: NOT OK`.
+`## Findings` ranked, numbered F1..Fn, tagged (Cx):
+- **Fn [SEVERITY] (Cx) one-line claim** / Evidence / Failure scenario / The document should say / `Kind: FACT` or `Kind: INFERENCE`.
+  Every finding carries its severity in brackets on its first line and its Kind.
 `## Decision verdicts` — one line per checklist item: AGREE / AGREE-WITH-CHANGE / DISAGREE + reason (+ alternative
 and cost for the last two). This section is what makes the consolidation fast: one line per decision.
 `## Verified as correct` — mandatory.
 `## Optional (not required)` — max 3 × 3 lines, or "none". Put a real proposal here rather than dropping it: the
 consolidator reads this section before folding, and more than one loop's best fix arrived from it.
-`## Stats`.
+`## Stats` — End `## Stats` with the line `format-rev: 2026-11-25`, the version of this format.
 
 Severity: BLOCKER = cannot work or breaks a house IRON RULE; MAJOR = wrong behavior in a realistic scenario or
 missing mechanism; MINOR = ambiguity an implementer could resolve wrongly; NIT = wording/anchor.

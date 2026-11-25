@@ -55,13 +55,14 @@ Supabase MCP on production, read-only — the dispatch names the project id and 
 token/secret columns. `sed`, `grep`, `git show`, `uv run python -c` for library facts.
 
 ## Output format (strict)
-Line 1: `VERDICT: OK` | `VERDICT: NOT OK` (NOT OK if ≥1 BLOCKER or MAJOR).
+Line 1, in every round (the first, a full re-check and a delta check alike): `VERDICT: OK` | `VERDICT: NOT OK` (NOT OK if ≥1 BLOCKER or MAJOR).
 `## Findings` ranked BLOCKER > MAJOR > MINOR > NIT, numbered F1..Fn, tagged with the checklist item (Ax):
-- **Fn [SEVERITY] (Ax) one-line claim** / Evidence / Failure scenario / The spec should say / Kind.
+- **Fn [SEVERITY] (Ax) one-line claim** / Evidence / Failure scenario / The spec should say / `Kind: FACT` or `Kind: INFERENCE`.
+  Every finding carries its severity in brackets on its first line and its Kind.
 `## Verified as correct` — mandatory; what you checked and it holds (anchor + one line). This section is what lets
 the consolidator tell "not looked at" from "looked at and it holds".
 `## Optional (not required)` — max 3 × 3 lines, or "none".
-`## Stats` — tool calls, files opened, SQL queries, rough tokens.
+`## Stats` — tool calls, files opened, SQL queries, rough tokens. End `## Stats` with the line `format-rev: 2026-11-25`, the version of this format.
 
 Severity: BLOCKER = cannot work or breaks a house IRON RULE; MAJOR = wrong behavior in a realistic scenario or
 missing mechanism; MINOR = ambiguity an implementer could resolve wrongly; NIT = wording/anchor.
