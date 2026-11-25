@@ -23,7 +23,7 @@ the dominant class while plans carried full code, now lives in the tests and the
 
 | Lens | Agent | Looks for |
 |---|---|---|
-| Ponytail | `superpowers:panel-ponytail` | reinvented stdlib, speculative abstractions, duplicated helpers, tests that test the framework |
+| Ponytail | `superpowers:panel-ponytail` | reinvented stdlib, speculative abstractions, duplicated helpers, tests that test the framework, the old code the change leaves dead |
 
 Its ruleset is the real `ponytail-review` skill, injected into the agent by the `skills:` line of its frontmatter
 — never a paraphrase written by you. Two house rules travel with it: every "reuse X instead" cites the existing

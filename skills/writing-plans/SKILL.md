@@ -87,6 +87,21 @@ you. Then, for each line, add the test that pins it to the task that
 owns the code, in that task's own step style — unless a test the plan
 already has catches it.]
 
+## Code This Change Leaves Dead
+
+[Every piece of existing code, test, configuration, flag, documentation and
+database object that nothing reaches once this plan is done — one line each:
+what it is, what replaces it, the census that shows nothing else uses it (the
+searches you ran across the repos, configs and scripts; for a database object,
+the views, functions, policies and triggers you checked), and its fate:
+- removed, by Task N, together with its tests; or
+- kept, for one of three reasons only: a live fallback (name the path that
+  still calls it); another component reads it (name the component); it can go
+  only after a release step — a data migration, a cutover, a change in another
+  repository — and the line names that step and where it is tracked.
+When the plan replaces nothing, write "None: this plan replaces no existing
+code" with the search that shows it.]
+
 ---
 ```
 
@@ -178,6 +193,8 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 **4. Review Focus:** For each input class or failure mode the spec implies, is there a task whose tests exercise it? The five uncovered ones most likely to bite a person go in the Review Focus section, and each line there gets its test added to the owning task. An empty section means you checked and found none, not that you skipped the check.
 
 **5. Proportion:** Compare the plan's length to the spec's. A plan several times longer than the spec it implements is a transcript of the program, not a plan. If code blocks are most of the document, replace bodies with signatures, test names and assertions, and check that each step is still unambiguous.
+
+**6. Dead code:** For every existing mechanism the spec replaces, rewrites or moves, run the census yourself — callers, imports, config keys, tests, docs, database objects — and check that each piece has its line in "Code This Change Leaves Dead" and, when removed, the task that removes it. A fallback the spec did not ask for is a decision for your human partner, not a reason to keep the code: the default is removal.
 
 If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
 
