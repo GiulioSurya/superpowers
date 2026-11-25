@@ -1,7 +1,7 @@
 ---
 name: panel-ponytail
 description: Plan review lens that hunts over-engineering — reinvented standard library, speculative abstractions, dead flexibility, duplicated helpers, tests that test the framework, the old code the change leaves dead — and names what replaces each. Dispatched only by the superpowers requesting-plan-review skill, never on its own.
-model: opus
+model: sonnet
 effort: max
 disallowedTools: Edit, Write, NotebookEdit
 skills:

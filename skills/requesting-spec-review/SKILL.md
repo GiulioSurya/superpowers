@@ -5,7 +5,7 @@ description: Use when a spec or design document is drafted and about to go to pl
 
 # Requesting a spec review
 
-Four read-only Opus lenses read the spec against the real code, in parallel, each blind to the others. You are
+Four read-only Sonnet lenses read the spec against the real code, in parallel, each blind to the others. You are
 the consolidator: you gather what they need, dispatch them, validate what comes back, fold it, and name the stop
 reason.
 
@@ -36,7 +36,7 @@ enters your context and you never write it: the only thing you write is the disp
 Run all four when the spec touches a database or an edge function; the first three otherwise.
 
 Two facts about the mechanism, each learned at the cost of a round:
-- **Do not pass `model` to `Agent`.** The agent file pins `opus`; the tool's `model` parameter overrides the file
+- **Do not pass `model` to `Agent`.** The agent file pins `sonnet`; the tool's `model` parameter overrides the file
   silently, and a demoted lens still returns a well-formed verdict — the loss shows only as findings that were
   never made. This is the one case where "always pass the model explicitly" does not apply: the agent file is the
   explicit model.

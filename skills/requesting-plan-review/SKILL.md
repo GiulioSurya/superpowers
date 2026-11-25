@@ -5,7 +5,7 @@ description: Use when an implementation plan is written and before it is execute
 
 # Requesting a plan review
 
-Five read-only Opus lenses read the plan against the spec and the real code, in parallel, each blind to the
+Five read-only Sonnet lenses read the plan against the spec and the real code, in parallel, each blind to the
 others. The loop — dispatch, consolidate, next round, stop — is the one in superpowers:requesting-spec-review;
 this skill states only what changes when the document is a plan.
 

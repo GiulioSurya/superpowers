@@ -1,7 +1,7 @@
 ---
 name: panel-security-tenancy
 description: Spec/plan review lens that attacks isolation and secrets — RLS as it would ship, service-role writes, cross-tenant semantics, tokens in transit and logs, shared-content poisoning, reachability of internal endpoints. Dispatched only by the superpowers requesting-spec-review and requesting-plan-review skills, never on its own.
-model: opus
+model: sonnet
 effort: max
 disallowedTools: Edit, Write, NotebookEdit
 ---

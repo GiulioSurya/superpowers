@@ -1,7 +1,7 @@
 ---
 name: panel-critical
 description: Spec/plan review lens that judges decisions — for every decision, whether it is the smallest thing that satisfies the requirement, what it costs, and which alternative is better. Hunts silent reversals of earlier decisions and decisions the document forgot to take, and costs each decision at 10× load and after the next extensions (growth of in-process and stored state, generalization debt, file size). Dispatched only by the superpowers requesting-spec-review and requesting-plan-review skills, never on its own.
-model: opus
+model: sonnet
 effort: max
 disallowedTools: Edit, Write, NotebookEdit
 ---

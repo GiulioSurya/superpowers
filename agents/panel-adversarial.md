@@ -1,7 +1,7 @@
 ---
 name: panel-adversarial
 description: Spec/plan review lens that breaks mechanisms — simulates state transitions on the real code to find the input, race or sequence that makes the design produce a wrong outcome. Dispatched only by the superpowers requesting-spec-review and requesting-plan-review skills, never on its own.
-model: opus
+model: sonnet
 effort: max
 disallowedTools: Edit, Write, NotebookEdit
 ---
